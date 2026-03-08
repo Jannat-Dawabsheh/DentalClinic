@@ -1,0 +1,15 @@
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\bin\Debug\net9.0\DentalClinic.BLL.deps.json
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\bin\Debug\net9.0\DentalClinic.BLL.dll
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\bin\Debug\net9.0\DentalClinic.BLL.pdb
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\DentalClinic.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\DentalClinic.BLL.AssemblyInfoInputs.cache
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\DentalClinic.BLL.AssemblyInfo.cs
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\DentalClinic.BLL.csproj.CoreCompileInputs.cache
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\DentalClinic.BLL.dll
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\refint\DentalClinic.BLL.dll
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\DentalClinic.BLL.pdb
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\ref\DentalClinic.BLL.dll
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\bin\Debug\net9.0\DentalClinic.DAL.dll
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\bin\Debug\net9.0\DentalClinic.DAL.pdb
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\DentalClinic.BLL.csproj.AssemblyReference.cache
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.BLL\obj\Debug\net9.0\DentalCl.7C278448.Up2Date

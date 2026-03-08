@@ -1,0 +1,14 @@
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\bin\Debug\net9.0\DentalClinic.DAL.deps.json
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\bin\Debug\net9.0\DentalClinic.DAL.runtimeconfig.json
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\bin\Debug\net9.0\DentalClinic.DAL.dll
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\bin\Debug\net9.0\DentalClinic.DAL.pdb
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\DentalClinic.DAL.csproj.AssemblyReference.cache
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\DentalClinic.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\DentalClinic.DAL.AssemblyInfoInputs.cache
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\DentalClinic.DAL.AssemblyInfo.cs
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\DentalClinic.DAL.csproj.CoreCompileInputs.cache
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\DentalClinic.DAL.dll
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\refint\DentalClinic.DAL.dll
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\DentalClinic.DAL.pdb
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\DentalClinic.DAL.genruntimeconfig.cache
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.DAL\obj\Debug\net9.0\ref\DentalClinic.DAL.dll
