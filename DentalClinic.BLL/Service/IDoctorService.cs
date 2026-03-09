@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DAL.DTO.Request.Admin;
+using DentalClinic.DAL.DTO.Response;
 using DentalClinic.DAL.DTO.Response.Admin;
 using DentalClinic.DAL.DTO.Response.Auth;
 using System;
@@ -11,6 +12,10 @@ namespace DentalClinic.BLL.Service
 {
     public interface IDoctorService
     {
-        Task<CreateDoctorResponse> CreateAsync(CreateDoctorRequest Request);
+        Task<List<DoctorResponse>> GetAllDoctorsAsync();
+        Task<BaseResponse> CreateAsync(CreateDoctorRequest Request);
+        Task<BaseResponse> UpdateDoctorAsync(int id, UpdateDoctorRequest request);
+        Task<BaseResponse> DeleteDoctorAsync(int id);
+        
     }
 }

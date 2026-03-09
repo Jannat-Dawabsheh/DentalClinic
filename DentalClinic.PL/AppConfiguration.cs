@@ -1,4 +1,5 @@
 ﻿using DentalClinic.BLL.Service;
+using DentalClinic.DAL.Models;
 using DentalClinic.DAL.Repository;
 using DentalClinic.DAL.Utils;
 using kashop.bll.Service;
@@ -6,6 +7,7 @@ using kashop.pl.Middleware;
 
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace DentalClinic.PL
 {
@@ -30,3 +32,4 @@ namespace DentalClinic.PL
         }
     }
 }
+

@@ -17,11 +17,30 @@ namespace DentalClinic.DAL.Repository
         {
             _context = context;
         }
+
+        public async Task<List<Doctor>>GetAllAsync()
+        {
+            
+            var response=await _context.Doctors.Include(u=>u.User).ToListAsync();
+            return response;
+        }
         public async Task<Doctor> CreateDoctor(Doctor Request)
         {
             await _context.Doctors.AddAsync(Request);
             await _context.SaveChangesAsync();
             return Request;
+        }
+        public async Task<Doctor?> FindByIdAsync(int id)
+        {
+            return await _context.Doctors.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<Doctor?> UpdateAsync(Doctor doctor)
+        {
+            _context.Doctors.Update(doctor);
+            await _context.SaveChangesAsync();
+            return doctor;
+
         }
     }
 }

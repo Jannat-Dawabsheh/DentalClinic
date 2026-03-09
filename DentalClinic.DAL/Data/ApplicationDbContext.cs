@@ -36,7 +36,8 @@ namespace DentalClinic.DAL.Data
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim");
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
-        
+            builder.Entity<Doctor>().HasOne(c => c.User).WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade); 
+
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

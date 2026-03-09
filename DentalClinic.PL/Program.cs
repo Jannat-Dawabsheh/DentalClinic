@@ -1,4 +1,5 @@
 
+using DentalClinic.BLL.MapsterConfiguration;
 using DentalClinic.DAL.Data;
 using DentalClinic.DAL.Models;
 using DentalClinic.DAL.Utils;
@@ -87,7 +88,7 @@ namespace DentalClinic.PL
             //});
             //builder.Services.AddEndpointsApiExplorer();
             AppConfiguration.Config(builder.Services);
-            //MapsterConfig.MapsterConfigRegister();
+            MapsterConfig.MapsterConfigRegister();
             var app = builder.Build();
             //app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
             // Configure the HTTP request pipeline.

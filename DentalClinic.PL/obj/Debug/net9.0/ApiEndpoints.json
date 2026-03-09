@@ -102,6 +102,16 @@
   },
   {
     "ContainingType": "DentalClinic.PL.Areas.Admin.DoctorsController",
+    "Method": "GetAllDoctors",
+    "RelativePath": "api/Doctors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Admin.DoctorsController",
     "Method": "CreateDoctor",
     "RelativePath": "api/Doctors",
     "HttpMethod": "POST",
@@ -111,6 +121,43 @@
       {
         "Name": "request",
         "Type": "DentalClinic.DAL.DTO.Request.Admin.CreateDoctorRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Admin.DoctorsController",
+    "Method": "DeleteDoctor",
+    "RelativePath": "api/Doctors/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Admin.DoctorsController",
+    "Method": "UpdateDoctor",
+    "RelativePath": "api/Doctors/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "DentalClinic.DAL.DTO.Request.Admin.UpdateDoctorRequest",
         "IsRequired": true
       }
     ],

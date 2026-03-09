@@ -21,4 +21,8 @@
     <Folder Include="Validation\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="DTO\Request\Admin\UpdateDoctorRequest.cs" />
+  </ItemGroup>
+
 </Project>

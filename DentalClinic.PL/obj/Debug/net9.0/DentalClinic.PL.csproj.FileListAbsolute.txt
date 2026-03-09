@@ -179,3 +179,4 @@ C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.PL\bin\Debug\net9.0\M
 C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.PL\bin\Debug\net9.0\Mapster.Core.dll
 C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.PL\bin\Debug\net9.0\DentalClinic.BLL.dll
 C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.PL\bin\Debug\net9.0\DentalClinic.BLL.pdb
+C:\Users\ashraf\source\repos\api\DentalClinic\DentalClinic.PL\obj\Debug\net9.0\DentalClinic.PL.sourcelink.json

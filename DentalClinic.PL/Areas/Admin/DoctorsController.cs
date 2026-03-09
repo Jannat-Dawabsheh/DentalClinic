@@ -18,11 +18,49 @@ namespace DentalClinic.PL.Areas.Admin
         {
             _doctorService = doctorService;
         }
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetAllDoctors()
+        {
+            var response = await _doctorService.GetAllDoctorsAsync();
+            return Ok(response);
+        }
+
         [HttpPost("")]
         public async Task<IActionResult>CreateDoctor(CreateDoctorRequest request)
         {
             var response=await _doctorService.CreateAsync(request);
             return  Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteDoctor([FromRoute] int id)
+        {
+            var result = await _doctorService.DeleteDoctorAsync(id);
+            if (!result.Success)
+            {
+                if (result.Message.Contains("Not Found"))
+                {
+                    return NotFound(result);
+                }
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateDoctor([FromRoute] int id, [FromBody] UpdateDoctorRequest request)
+        {
+            var result = await _doctorService.UpdateDoctorAsync(id, request);
+            if (!result.Success)
+            {
+                if (result.Message.Contains("Not Found"))
+                {
+                    return NotFound(result);
+                }
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
     }
 }
