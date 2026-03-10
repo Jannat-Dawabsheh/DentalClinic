@@ -58,11 +58,27 @@ namespace DentalClinic.BLL.Service
                 }
 
                 await _userManager.AddToRoleAsync(user, "Doctor");
-                Doctor doctor = Request.Adapt<Doctor>();
-               doctor.UserId=user.Id;
-
-                await _doctorRepository.CreateDoctor(doctor);
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                
+                var doctor = new Doctor
+                {
+                    UserId = user.Id,
+                    SpecializationId = Request.Specialization,
+                    Gender = Request.Gender,
+                    ExperienceYears = Request.ExperienceYears
+                };
+                var doctorResult= await _doctorRepository.CreateDoctor(doctor);
+                if (doctorResult is null)
+                {
+                  await  _userManager.DeleteAsync(user);
+                    return new BaseResponse()
+                    {
+                        Success = false,
+                        Message = "Doctor creation failed",
+                        Errors = result.Errors.Select(e => e.Description).ToList()
+                    };
+                }
+            
+                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 token = Uri.EscapeDataString(token);
                 var emailUrl = $"http://localhost:5238/api/auth/Accounts/ConfirmEmail?token={token}&userId={user.Id}";
                 await _emailSender.SendEmailAsync(user.Email, "welcome", $"<h1>welcome doctor..{user.UserName}, your password is {Request.Password}</h1>" + $"<a href='{emailUrl}'>confirm email</a>");
@@ -123,9 +139,10 @@ namespace DentalClinic.BLL.Service
                     doctor.User.PhoneNumber = request.PhoneNumber;
                 }
 
-                if (request.Specialization != null)
+                if (request.Specialization.HasValue)
                 {
-                    doctor.Specialization = request.Specialization;
+                    doctor.SpecializationId = request.Specialization.Value;
+                    doctor.Specialization = null;
                 }
 
                 if (request.Gender != null)

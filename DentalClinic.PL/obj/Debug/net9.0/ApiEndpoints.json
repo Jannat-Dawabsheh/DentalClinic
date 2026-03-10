@@ -164,6 +164,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
+    "Method": "GetAllDoctors",
+    "RelativePath": "api/Patients/Doctors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
+    "Method": "GetDoctorBySpecialization",
+    "RelativePath": "api/Patients/Doctors/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "DentalClinic.PL.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

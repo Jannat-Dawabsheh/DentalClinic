@@ -10,5 +10,7 @@ namespace DentalClinic.DAL.Repository
     public interface IPatientRepository
     {
         Task<Patient> CreatePatient(Patient Request);
+        Task<List<Doctor>> GetAllAsync();
+        Task<List<Doctor>> GetDoctorsBySpecialization(int id);
     }
 }

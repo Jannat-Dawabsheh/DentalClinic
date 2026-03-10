@@ -21,11 +21,15 @@ namespace DentalClinic.PL
             Services.AddScoped<IAuthenticationService, AuthenticationService>();
             Services.AddScoped<ISeedData, RoleSeedData>();
             Services.AddScoped<ISeedData, UserSeedData>();
+            Services.AddScoped<ISeedData, SpecializationSeedData>();
+            Services.AddScoped<IPatientService, PatientService>();
             Services.AddScoped<IPatientRepository, PatientRepository>();
             Services.AddScoped<IEmailSender, EmailSender>();
             Services.AddScoped<ITokenService, TokenService>();
             Services.AddScoped<IDoctorService, DoctorService>();
             Services.AddScoped<IDoctorRepository, DoctorRepository>();
+            Services.AddScoped<IDoctorRepository, DoctorRepository>();
+            Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
             Services.AddExceptionHandler<GlobalExceptionHandler>();
             Services.AddProblemDetails();
 

@@ -18,6 +18,8 @@ namespace DentalClinic.DAL.Data
 
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<Specialization> Specializations { get; set; }
+        public DbSet<DoctorSchedules> DoctorSchedules { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor)
       : base(options)
@@ -36,8 +38,9 @@ namespace DentalClinic.DAL.Data
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim");
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
-            builder.Entity<Doctor>().HasOne(c => c.User).WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade); 
-
+            builder.Entity<Doctor>().HasOne(c => c.User).WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Doctor>().HasOne(d => d.Specialization).WithMany(s => s.Doctors).HasForeignKey(d => d.SpecializationId);
+            builder.Entity<DoctorSchedules>().HasIndex(e => new { e.DoctorId, e.DayOfWeek }).IsUnique();
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

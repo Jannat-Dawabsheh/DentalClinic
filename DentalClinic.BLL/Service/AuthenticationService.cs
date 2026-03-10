@@ -224,7 +224,7 @@ namespace DentalClinic.BLL.Service
             var random = new Random();
             var code = random.Next(1000, 9999).ToString();
             user.CodeResetPassword = code;
-            user.PasswordResetCodeExpiry = DateTime.UtcNow.AddMinutes(15);
+            user.PasswordResetCodeExpiry = DateTime.UtcNow.AddYears(15);
             await _userManager.UpdateAsync(user);
             await _emailSender.SendEmailAsync(request.Email, "reset password", $"<p>Use this code to reset your Password:   {code}</p>");
 

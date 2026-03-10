@@ -1,5 +1,7 @@
 ﻿using DentalClinic.DAL.Data;
 using DentalClinic.DAL.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,20 @@ namespace DentalClinic.DAL.Repository
             await _context.Patients.AddAsync(Request);
             await _context.SaveChangesAsync();
             return Request;
+        }
+
+        public async Task<List<Doctor>> GetAllAsync()
+        {
+
+            var response = await _context.Doctors.Include(u => u.User).Include(u => u.Specialization).ToListAsync();
+            return response;
+        }
+
+        public async Task<List<Doctor>> GetDoctorsBySpecialization(int id)
+        {
+
+            var response = await _context.Doctors.Include(u => u.User).Include(u => u.Specialization).Where(u=>u.SpecializationId==id).ToListAsync();
+            return response;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DAL.DTO.Response.Admin;
+using DentalClinic.DAL.DTO.Response.Patient;
 using DentalClinic.DAL.Models;
 using Mapster;
 using System;
@@ -16,7 +17,13 @@ namespace DentalClinic.BLL.MapsterConfiguration
             TypeAdapterConfig<Doctor, DoctorResponse>.NewConfig().Map(dest => dest.UserName, source => source.User.UserName)
                 .Map(dest => dest.FullName, source => source.User.FullName)
                 .Map(dest => dest.Email, source => source.User.Email)
-                .Map(dest => dest.PhoneNumber, source => source.User.PhoneNumber);
+                .Map(dest => dest.PhoneNumber, source => source.User.PhoneNumber)
+                .Map(dest => dest.Specialization, source => source.Specialization.Name);
+
+            TypeAdapterConfig<Doctor, DoctorResposeForPatient>.NewConfig()
+                .Map(dest => dest.FullName, source => source.User.FullName)
+                .Map(dest => dest.Specialization, source => source.Specialization.Name);
+
 
         }
     }

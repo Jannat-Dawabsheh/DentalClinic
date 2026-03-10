@@ -11,7 +11,8 @@ namespace DentalClinic.DAL.Models
         public int Id { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public string Specialization { get; set; }
+        public int SpecializationId { get; set; }
+        public Specialization Specialization { get; set; }
         public string Gender { get; set; }
         public int ExperienceYears {  get; set; }
     }
