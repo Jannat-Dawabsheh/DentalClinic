@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DentalClinic.DAL.Repository
 {
-    public interface IDoctorRepository
+    public interface IManageRepository
     {
         Task<Doctor> CreateDoctor(Doctor Request);
         Task<List<Doctor>> GetAllAsync();

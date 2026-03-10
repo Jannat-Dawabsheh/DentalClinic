@@ -10,11 +10,11 @@ namespace DentalClinic.PL.Areas.Admin
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles ="Admin")]
-    public class DoctorsController : ControllerBase
+    public class ManagesController : ControllerBase
     {
-        private readonly IDoctorService _doctorService;
+        private readonly IManageService _doctorService;
 
-        public DoctorsController(IDoctorService doctorService)
+        public ManagesController(IManageService doctorService)
         {
             _doctorService = doctorService;
         }

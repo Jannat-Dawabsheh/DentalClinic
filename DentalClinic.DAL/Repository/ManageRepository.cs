@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DentalClinic.DAL.Repository
 {
-    public class DoctorRepository : IDoctorRepository
+    public class ManageRepository : IManageRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public DoctorRepository(ApplicationDbContext context)
+        public ManageRepository(ApplicationDbContext context)
         {
             _context = context;
         }

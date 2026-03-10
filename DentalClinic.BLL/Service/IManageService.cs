@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DentalClinic.BLL.Service
 {
-    public interface IDoctorService
+    public interface IManageService
     {
         Task<List<DoctorResponse>> GetAllDoctorsAsync();
         Task<BaseResponse> CreateAsync(CreateDoctorRequest Request);

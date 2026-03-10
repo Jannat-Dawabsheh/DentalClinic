@@ -17,13 +17,13 @@ using System.Threading.Tasks;
 
 namespace DentalClinic.BLL.Service
 {
-    public class DoctorService : IDoctorService
+    public class ManageService : IManageService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IDoctorRepository _doctorRepository;
+        private readonly IManageRepository _doctorRepository;
         private readonly IEmailSender _emailSender;
 
-        public DoctorService(UserManager<ApplicationUser> userManager,IDoctorRepository doctorRepository, IEmailSender emailSender)
+        public ManageService(UserManager<ApplicationUser> userManager,IManageRepository doctorRepository, IEmailSender emailSender)
         {
             _userManager = userManager;
             _doctorRepository = doctorRepository;

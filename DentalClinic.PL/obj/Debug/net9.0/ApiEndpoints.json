@@ -101,9 +101,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "DentalClinic.PL.Areas.Admin.DoctorsController",
+    "ContainingType": "DentalClinic.PL.Areas.Admin.ManagesController",
     "Method": "GetAllDoctors",
-    "RelativePath": "api/Doctors",
+    "RelativePath": "api/Manages",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -111,9 +111,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "DentalClinic.PL.Areas.Admin.DoctorsController",
+    "ContainingType": "DentalClinic.PL.Areas.Admin.ManagesController",
     "Method": "CreateDoctor",
-    "RelativePath": "api/Doctors",
+    "RelativePath": "api/Manages",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -127,9 +127,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "DentalClinic.PL.Areas.Admin.DoctorsController",
+    "ContainingType": "DentalClinic.PL.Areas.Admin.ManagesController",
     "Method": "DeleteDoctor",
-    "RelativePath": "api/Doctors/{id}",
+    "RelativePath": "api/Manages/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -143,9 +143,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "DentalClinic.PL.Areas.Admin.DoctorsController",
+    "ContainingType": "DentalClinic.PL.Areas.Admin.ManagesController",
     "Method": "UpdateDoctor",
-    "RelativePath": "api/Doctors/{id}",
+    "RelativePath": "api/Manages/{id}",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
