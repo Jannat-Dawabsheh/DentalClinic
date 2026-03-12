@@ -9,7 +9,7 @@ namespace DentalClinic.DAL.Repository
 {
     public interface IManageRepository
     {
-        Task<Doctor> CreateDoctor(Doctor Request);
+        Task<Doctor?> CreateDoctor(Doctor Request);
         Task<List<Doctor>> GetAllAsync();
         Task<Doctor?> FindByIdAsync(int id);
         Task<Doctor?> UpdateAsync(Doctor doctor);

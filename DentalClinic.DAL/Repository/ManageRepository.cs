@@ -25,7 +25,7 @@ namespace DentalClinic.DAL.Repository
             var response=await _context.Doctors.Include(u=>u.User).Include(u => u.Specialization).ToListAsync();
             return response;
         }
-        public async Task<Doctor> CreateDoctor(Doctor Request)
+        public async Task<Doctor?> CreateDoctor(Doctor Request)
         {
             
             try

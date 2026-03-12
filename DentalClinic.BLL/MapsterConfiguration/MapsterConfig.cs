@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DAL.DTO.Response.Admin;
+using DentalClinic.DAL.DTO.Response.Doctor;
 using DentalClinic.DAL.DTO.Response.Patient;
 using DentalClinic.DAL.Models;
 using Mapster;
@@ -23,6 +24,9 @@ namespace DentalClinic.BLL.MapsterConfiguration
             TypeAdapterConfig<Doctor, DoctorResposeForPatient>.NewConfig()
                 .Map(dest => dest.FullName, source => source.User.FullName)
                 .Map(dest => dest.Specialization, source => source.Specialization.Name);
+
+            TypeAdapterConfig<DoctorSchedules, DoctorScheduleResponse>.NewConfig()
+              .Map(dest => dest.DayOfWeek, source => source.DayOfWeek.ToString());
 
 
         }

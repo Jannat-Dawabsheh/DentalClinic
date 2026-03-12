@@ -29,6 +29,8 @@ namespace DentalClinic.PL
             Services.AddScoped<IManageService, ManageService>();
             Services.AddScoped<IManageRepository, ManageRepository>();
             Services.AddScoped<IManageRepository, ManageRepository>();
+            Services.AddScoped<IDoctorRepository, DoctorRepository>();
+            Services.AddScoped<IDoctorServices, DoctorServices>();
             Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
             Services.AddExceptionHandler<GlobalExceptionHandler>();
             Services.AddProblemDetails();

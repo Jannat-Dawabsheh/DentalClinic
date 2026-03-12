@@ -101,6 +101,69 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "GetWorkingDay",
+    "RelativePath": "api/Doctors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "AddWorkingDay",
+    "RelativePath": "api/Doctors",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DentalClinic.DAL.DTO.Request.Doctor.AddDayRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "UpdateWorkingDay",
+    "RelativePath": "api/Doctors/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "DentalClinic.DAL.DTO.Response.Doctor.UpdateDayOfWorkRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "DeleteWorkingDay",
+    "RelativePath": "api/Doctors/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "DentalClinic.PL.Areas.Admin.ManagesController",
     "Method": "GetAllDoctors",
     "RelativePath": "api/Manages",
