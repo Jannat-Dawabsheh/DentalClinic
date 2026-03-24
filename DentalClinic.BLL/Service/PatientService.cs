@@ -1,22 +1,33 @@
-﻿using DentalClinic.DAL.DTO.Response.Admin;
+﻿using Azure.Core;
+using DentalClinic.DAL.DTO.Request.Patient;
+using DentalClinic.DAL.DTO.Response.Admin;
+using DentalClinic.DAL.DTO.Response.Doctor;
 using DentalClinic.DAL.DTO.Response.Patient;
+using DentalClinic.DAL.Models;
 using DentalClinic.DAL.Repository;
 using Mapster;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DentalClinic.BLL.Service
 {
-    public class PatientService: IPatientService
+    public class PatientService : IPatientService
     {
         private readonly IPatientRepository _patientRepository;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IEmailSender _emailSender;
 
-        public PatientService(IPatientRepository patientRepository)
+        public PatientService(IPatientRepository patientRepository, IDoctorRepository doctorRepository, IEmailSender emailSender)
         {
             _patientRepository = patientRepository;
+            _doctorRepository = doctorRepository;
+            _emailSender = emailSender;
         }
         public async Task<List<DoctorResposeForPatient>> GetAllDoctorsAsync()
         {
@@ -25,11 +36,90 @@ namespace DentalClinic.BLL.Service
             return response;
         }
 
-        public async Task<List<DoctorResposeForPatient>> GetDoctorsBySpecialization(int id)
+        public async Task<List<DoctorResposeForPatient>> GetDoctorsBySpecialization(int id, DayOfWeek? day)
         {
-            var doctors = await _patientRepository.GetDoctorsBySpecialization(id);
-            var response = doctors.Adapt<List<DoctorResposeForPatient>>();
+            var query = _doctorRepository.Query();
+            //var doctors = await _patientRepository.GetDoctorsBySpecialization(id);
+            query = query.Where(d => d.Doctor.SpecializationId == id);
+            if (day is not null)
+            {
+                query = query.Where(p => p.DayOfWeek == day);
+            }
+            var response = query.GroupBy(x => x.Doctor.Id).Select(g => g.First().Doctor).BuildAdapter().AdaptToType<List<DoctorResposeForPatient>>();
             return response;
+        }
+
+        public async Task<List<DoctorWorkingDaysRespose>?> GetDoctorWorkingDays(int Id)
+        {
+
+            var workingDays = await _doctorRepository.GetWorkingDaysForDoctor(Id);
+            if (workingDays is not null)
+            {
+                var response = workingDays.Adapt<List<DoctorWorkingDaysRespose>>();
+                return response;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public DateTime GetNextDayOfWeek(DayOfWeek targetDay)
+        {
+            var today = DateTime.Today;
+            int daysToAdd = ((int)targetDay - (int)today.DayOfWeek + 7) % 7;
+
+            return today.AddDays(daysToAdd == 0 ? 7 : daysToAdd);
+        }
+
+        public async Task<AvilableSlotResponse?> GetAvilableSlots(int Id)
+        {
+            var workingDay = await _patientRepository.GetWorkingDayById(Id);
+            var date = GetNextDayOfWeek(workingDay.DayOfWeek);
+            var start = date.Date.Add(workingDay.StartTime);
+            var endOfDay = date.Date.Add(workingDay.EndTime);
+            var slots = new List<SlotDTO>();
+            while (start < endOfDay)
+            {
+
+                var slotEnd = start.Add(TimeSpan.FromMinutes(workingDay.AppointmentDuration));
+                if (slotEnd > endOfDay) break;
+                slots.Add(new SlotDTO() { Start = start, End = slotEnd });
+                start = slotEnd;
+
+            }
+
+            // chek booked
+
+            var bookedAppointments = await _patientRepository.GetBookedAppointments(workingDay.DoctorId, date);
+
+            slots = slots.Where(slot => !bookedAppointments.Any(a => a.StartDateTime < slot.End && a.EndDateTime > slot.Start)).ToList();
+
+            return new AvilableSlotResponse()
+            {
+                DoctorId = workingDay.DoctorId,
+                Date = date,
+                Slots = slots
+            };
+        }
+  
+        public async Task<AppointmentResponse>BookAppointment(string userId,int doctorId,BookAppointmentRequest request)
+        {
+
+                Doctor doctor = await _doctorRepository.FindByDoctorIdAsync(doctorId);
+                Patient patient = await _patientRepository.FindByIdAsync(userId);
+                var appointment = request.Adapt<Appointment>();
+                appointment.DoctorId = doctorId;
+                appointment.PatientId = patient.Id;
+                appointment.Status = Status.Pending;
+                var response = await _patientRepository.BookAppointment(appointment);
+                await _emailSender.SendEmailAsync(doctor.User.Email, "New appointment", $"<p>Hello doctor..{doctor.User.UserName}, there is a new appointment request booked by patient : {patient.Id}</p>");
+
+            return response.Adapt<AppointmentResponse>();
+            
+
+
         }
     }
 }

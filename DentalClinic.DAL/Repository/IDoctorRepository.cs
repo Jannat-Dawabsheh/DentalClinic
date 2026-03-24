@@ -11,10 +11,13 @@ namespace DentalClinic.DAL.Repository
     {
         Task<Doctor?> FindByIdAsync(string id);
         Task<DoctorSchedules?> FindDayByIdAsync(int id);
+        Task<Doctor?> FindByDoctorIdAsync(int id);
         Task<List<DoctorSchedules>?> GetWorkingDaysForDoctor(int id);
+
         Task<DoctorSchedules?> AddWorkingDay(DoctorSchedules Request);
         Task<DoctorSchedules> UpdateDayOfWork(DoctorSchedules doctorSchedules);
         Task DeleteAsync(DoctorSchedules doctorSchedules);
+        IQueryable<DoctorSchedules> Query();
 
     }
     

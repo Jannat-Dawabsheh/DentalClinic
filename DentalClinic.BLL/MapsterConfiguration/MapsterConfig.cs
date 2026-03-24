@@ -28,6 +28,20 @@ namespace DentalClinic.BLL.MapsterConfiguration
             TypeAdapterConfig<DoctorSchedules, DoctorScheduleResponse>.NewConfig()
               .Map(dest => dest.DayOfWeek, source => source.DayOfWeek.ToString());
 
+            TypeAdapterConfig<DoctorSchedules, DoctorResposeForPatient>
+            .NewConfig()
+            .Map(dest => dest.Id, src => src.Doctor.Id)
+            .Map(dest => dest.FullName, src => src.Doctor.User.FullName)
+            .Map(dest => dest.Gender, src => src.Doctor.Gender)
+            .Map(dest => dest.ExperienceYears, src => src.Doctor.ExperienceYears)
+            .Map(dest => dest.Specialization, src => src.Doctor.Specialization.Name);
+
+            TypeAdapterConfig<Appointment, AppointmentResponse>
+          .NewConfig()
+          .Map(dest => dest.StartDateTime, src => src.StartDateTime)
+          .Map(dest => dest.EndDateTime, src => src.EndDateTime);
+          
+
 
         }
     }

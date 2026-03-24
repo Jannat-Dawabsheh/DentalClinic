@@ -228,6 +228,27 @@
   },
   {
     "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
+    "Method": "BookAppointment",
+    "RelativePath": "api/Patients/BookAppointment/{doctorId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "doctorId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "DentalClinic.DAL.DTO.Request.Patient.BookAppointmentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
     "Method": "GetAllDoctors",
     "RelativePath": "api/Patients/Doctors",
     "HttpMethod": "GET",
@@ -240,6 +261,43 @@
     "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
     "Method": "GetDoctorBySpecialization",
     "RelativePath": "api/Patients/Doctors/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "WorkingDay",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
+    "Method": "GetDoctorWorkingDays",
+    "RelativePath": "api/Patients/Doctors/workingDays/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
+    "Method": "GetWorkingDaySlot",
+    "RelativePath": "api/Patients/Doctors/workingDaySlots/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

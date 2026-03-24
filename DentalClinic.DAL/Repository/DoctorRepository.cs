@@ -27,6 +27,11 @@ namespace DentalClinic.DAL.Repository
             return await _context.Doctors.Include(c => c.User).FirstOrDefaultAsync(c => c.UserId == id);
         }
 
+        public async Task<Doctor?> FindByDoctorIdAsync(int id)
+        {
+            return await _context.Doctors.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task<DoctorSchedules?> FindDayByIdAsync(int id)
         {
             return await _context.DoctorSchedules.Include(c => c.Doctor).FirstOrDefaultAsync(c => c.Id == id);
@@ -41,6 +46,8 @@ namespace DentalClinic.DAL.Repository
                 return null;
             }
         }
+
+
 
         public async Task<DoctorSchedules?> AddWorkingDay(DoctorSchedules Request)
         {
@@ -72,6 +79,11 @@ namespace DentalClinic.DAL.Repository
                 await _context.SaveChangesAsync();
               
             
+        }
+
+        public IQueryable<DoctorSchedules> Query()
+        {
+            return _context.DoctorSchedules.Include(d=>d.Doctor).ThenInclude(d => d.User).Include(x => x.Doctor.Specialization).AsQueryable();
         }
     }
 }
