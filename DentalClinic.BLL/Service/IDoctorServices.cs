@@ -17,5 +17,9 @@ namespace DentalClinic.BLL.Service
         
        Task<BaseResponse> UpdateworkingDay(int id, UpdateDayOfWorkRequest request);
         Task<BaseResponse> DeleteWorkingDayAsync(int id);
+        Task<List<AppointmentListResponse>?> GetDoctorAppointments(string userId, Status? Status);
+        Task<BaseResponse> UpdateAppointmentStatus(UpdateAppointmentRequest request, string userId);
+        Task<BaseResponse> UpdatePatientData(UpdatePatientDataRequest request, int id);
+        Task<PatientDataResponse?> GetPatientByIdOrName(int? Id, String? Name);
     }
 }

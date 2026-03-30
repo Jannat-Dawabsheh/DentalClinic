@@ -121,5 +121,27 @@ namespace DentalClinic.BLL.Service
 
 
         }
+
+        public async Task<List<AppointmentListResponseForPatient>?> GetPatientAppointments(string userId, Status? Status)
+        {
+            var patient = await _patientRepository.FindByIdAsync(userId);
+            var Appointments = await _patientRepository.GetAppointmentsForPatient(patient.Id);
+            if (Appointments is not null)
+            {
+                var response = Appointments.Adapt<List<AppointmentListResponseForPatient>>();
+                if (Status is not null)
+                {
+                    response = response.Where(a => a.Status == Status).ToList();
+                }
+                return response;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DentalClinic.BLL.Service;
 using DentalClinic.DAL.DTO.Request.Patient;
+using DentalClinic.DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +62,17 @@ namespace DentalClinic.PL.Areas.Patient
             catch (Exception ex) { 
               return BadRequest("This appointment has already booked");
             }
+        }
+
+        [HttpGet("Appointments")]
+
+        public async Task<IActionResult> GetPatientAppointments([FromQuery] Status? Status)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+            var result = await _patientService.GetPatientAppointments(userId, Status);
+            return Ok(result);
         }
     }
 }

@@ -164,6 +164,80 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "GetDoctorAppointments",
+    "RelativePath": "api/Doctors/Appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Status",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "UpdateAppointmentStatus",
+    "RelativePath": "api/Doctors/Appointments",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DentalClinic.DAL.DTO.Request.Doctor.UpdateAppointmentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "GetPatientByIdOrName",
+    "RelativePath": "api/Doctors/Patient",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "UpdatePatientData",
+    "RelativePath": "api/Doctors/PatientData/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DentalClinic.DAL.DTO.Request.Doctor.UpdatePatientDataRequest",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "DentalClinic.PL.Areas.Admin.ManagesController",
     "Method": "GetAllDoctors",
     "RelativePath": "api/Manages",
@@ -222,6 +296,22 @@
         "Name": "request",
         "Type": "DentalClinic.DAL.DTO.Request.Admin.UpdateDoctorRequest",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
+    "Method": "GetPatientAppointments",
+    "RelativePath": "api/Patients/Appointments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Status",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -306,6 +396,52 @@
         "Name": "id",
         "Type": "System.Int32",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.VisitsController",
+    "Method": "Create",
+    "RelativePath": "api/Visits",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Notes",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "XRayImages",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=9.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "NextAppointmentDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Treatments",
+        "Type": "System.Collections.Generic.List\u00601[[DentalClinic.DAL.DTO.Request.Doctor.VisitTreatmentDTO, DentalClinic.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Medicines",
+        "Type": "System.Collections.Generic.List\u00601[[DentalClinic.DAL.DTO.Request.Doctor.VisitMedicineDTO, DentalClinic.DAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "PaymentStatus",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "AppointmentId",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

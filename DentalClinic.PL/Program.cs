@@ -101,7 +101,7 @@ namespace DentalClinic.PL
             app.UseCors(MyAllowSpecificOrigins);
 
             //app.UseExceptionHandler();
-           // app.UseStaticFiles();
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

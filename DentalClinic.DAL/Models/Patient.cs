@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DentalClinic.DAL.Models
 {
-    public class Patient
+    public class Patient 
     {
         public int Id { get; set; }
         public string UserId { get; set; }

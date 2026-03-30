@@ -21,6 +21,11 @@ namespace DentalClinic.DAL.Data
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<DoctorSchedules> DoctorSchedules { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Visit> Visits { get; set; }
+        public DbSet<XRayImage> XRayImages { get; set; }
+        public DbSet<VisitTreatment> VisitTreatments { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<VisitMedicine> visitMedicines { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHttpContextAccessor httpContextAccessor)
       : base(options)

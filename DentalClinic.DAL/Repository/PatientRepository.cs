@@ -71,6 +71,22 @@ namespace DentalClinic.DAL.Repository
             return await _context.Patients.Include(c => c.User).FirstOrDefaultAsync(c => c.UserId == id);
         }
 
+        public async Task<List<Appointment>?> GetAppointmentsForPatient(int patientId)
+        {
+            try
+            {
+                return await _context.Appointments.Include(d => d.Patient).Include(d => d.Doctor).ThenInclude(u=>u.User).Where(d => d.PatientId == patientId).ToListAsync();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<Patient?> FindByPatientIdAsync(int id)
+        {
+            return await _context.Patients.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == id);
+        }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using DentalClinic.BLL.Service;
 using DentalClinic.DAL.DTO.Request.Doctor;
 using DentalClinic.DAL.DTO.Response.Doctor;
+using DentalClinic.DAL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -59,5 +60,43 @@ namespace DentalClinic.PL.Areas.Doctor
             var result = await _doctorServices.DeleteWorkingDayAsync(id);
             return Ok(result);
         }
+
+        [HttpGet("Appointments")]
+
+        public async Task<IActionResult> GetDoctorAppointments([FromQuery] Status? Status)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+            var result = await _doctorServices.GetDoctorAppointments(userId, Status);
+            return Ok(result);
+        }
+
+        [HttpPatch("Appointments")]
+
+        public async Task<IActionResult> UpdateAppointmentStatus([FromBody] UpdateAppointmentRequest request)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _doctorServices.UpdateAppointmentStatus(request,userId);
+            return Ok(result);
+        }
+
+        [HttpPatch("PatientData/{id}")]
+
+        public async Task<IActionResult> UpdatePatientData([FromBody] UpdatePatientDataRequest request, [FromRoute] int id)
+        {
+            var result = await _doctorServices.UpdatePatientData(request, id);
+            return Ok(result);
+        }
+
+        [HttpGet("Patient")]
+
+        public async Task<IActionResult> GetPatientByIdOrName([FromQuery] int? Id, [FromQuery] string? Name)
+        {
+
+            var result = await _doctorServices.GetPatientByIdOrName(Id, Name);
+            return Ok(result);
+        }
+
     }
 }

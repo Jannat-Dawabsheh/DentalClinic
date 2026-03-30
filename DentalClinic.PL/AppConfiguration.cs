@@ -22,6 +22,7 @@ namespace DentalClinic.PL
             Services.AddScoped<ISeedData, RoleSeedData>();
             Services.AddScoped<ISeedData, UserSeedData>();
             Services.AddScoped<ISeedData, SpecializationSeedData>();
+            Services.AddScoped<ISeedData, MedicineSeedData>();
             Services.AddScoped<IPatientService, PatientService>();
             Services.AddScoped<IPatientRepository, PatientRepository>();
             Services.AddScoped<IEmailSender, EmailSender>();
@@ -32,6 +33,10 @@ namespace DentalClinic.PL
             Services.AddScoped<IDoctorRepository, DoctorRepository>();
             Services.AddScoped<IDoctorServices, DoctorServices>();
             Services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+            Services.AddScoped<IVisitRepository, VisitRepository>();
+            Services.AddScoped<IVisitService, VisitService>();
+            Services.AddScoped<IFileService, FileService>();
+            Services.AddScoped<IMedicineRepository, MedicineRepository>();
             Services.AddExceptionHandler<GlobalExceptionHandler>();
             Services.AddProblemDetails();
 
