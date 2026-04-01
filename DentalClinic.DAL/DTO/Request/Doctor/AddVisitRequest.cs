@@ -11,7 +11,7 @@ namespace DentalClinic.DAL.DTO.Request.Doctor
     public class AddVisitRequest
     {
         public string? Notes { get; set; }
-        public List<IFormFile> XRayImages { get; set; }
+        public List<IFormFile>? XRayImages { get; set; }
         public DateTime? NextAppointmentDate { get; set; }
         public List<VisitTreatmentDTO> Treatments { get; set; }
         public List<VisitMedicineDTO> Medicines { get; set; }

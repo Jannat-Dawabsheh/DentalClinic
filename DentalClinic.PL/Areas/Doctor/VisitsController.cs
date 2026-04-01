@@ -11,6 +11,8 @@ namespace DentalClinic.PL.Areas.Doctor
 {
     [Route("api/[controller]")]
     [ApiController]
+
+    [Authorize(Roles = "Doctor")]
     public class VisitsController : ControllerBase
     {
         private readonly IVisitService _visitService;
@@ -22,7 +24,6 @@ namespace DentalClinic.PL.Areas.Doctor
             _doctorServices = doctorServices;
         }
 
-        [Authorize(Roles = "Doctor")]
         [HttpPost("")]
         public async Task<IActionResult> Create([FromForm] AddVisitRequest request)
         {
@@ -43,6 +44,29 @@ namespace DentalClinic.PL.Areas.Doctor
                 status = Status.Completed
             };
             await _doctorServices.UpdateAppointmentStatus(updateRequest, userId);
+            return Ok(response);
+        }
+
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetAllVisitsForDoctor([FromQuery]int? patientId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response = await _visitService.GetAllVisitsForDoctor(userId, patientId);
+            return Ok(response);
+        }
+
+        [HttpGet("{visitId}")]
+        public async Task<IActionResult> GetAllVisitsForDoctor([FromRoute] int visitId)
+        {
+            var response = await _visitService.GetVisitDetailsForDoctor(visitId);
+            return Ok(response);
+        }
+
+        [HttpGet("Record/{patientId}")]
+        public async Task<IActionResult> GetPatientVisitsForDoctor([FromRoute]int patientId)
+        {
+            var response = await _visitService.GetPatientVisitsForDoctor(patientId);
             return Ok(response);
         }
     }

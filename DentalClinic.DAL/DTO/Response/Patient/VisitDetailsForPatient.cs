@@ -1,6 +1,6 @@
 ﻿using DentalClinic.DAL.DTO.Request.Doctor;
+using DentalClinic.DAL.DTO.Response.Doctor;
 using DentalClinic.DAL.Models;
-using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +8,10 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace DentalClinic.DAL.DTO.Response.Doctor
+namespace DentalClinic.DAL.DTO.Response.Patient
 {
-    public class VisitResponse
+    public class VisitDetailsForPatient
     {
-        public int Id { get; set; }
-
         public string CreatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -23,6 +21,5 @@ namespace DentalClinic.DAL.DTO.Response.Doctor
         public DateTime? NextAppointmentDate { get; set; }
         public List<VisitTreatmentDTO> Treatments { get; set; } = new();
         public List<MedicineResponseDTO> Medicines { get; set; } = new();
-        public int AppointmentId { get; set; }
     }
 }

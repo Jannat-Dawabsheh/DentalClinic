@@ -20,6 +20,7 @@ namespace DentalClinic.BLL.Service
         Task<AvilableSlotResponse?> GetAvilableSlots(int Id);
         Task<AppointmentResponse> BookAppointment(string patientId, int doctorId, BookAppointmentRequest request);
         Task<List<AppointmentListResponseForPatient>?> GetPatientAppointments(string userId, Status? Status);
+        
     
     }
         

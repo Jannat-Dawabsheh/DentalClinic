@@ -86,6 +86,59 @@ namespace DentalClinic.DAL.Repository
             }
         }
 
+        public async Task<List<Visit>?>GetAllVisitsForPatient(int PatientId)
+        {
+            return await _context.Visits
+                .Include(v => v.XRayImages)
+                .Include(v => v.Treatments)
+                .Include(v => v.VisitMedicines)
+                .ThenInclude(vm => vm.Medicine)
+                .Where(v => v.Appointment.PatientId == PatientId).ToListAsync();
+        }
+
+        public async Task<Visit?> GetVisitDetailsForPatient(int PatientId,int visitId)
+        {
+            return await _context.Visits
+                .Include(v => v.XRayImages)
+                .Include(v => v.Treatments)
+                .Include(v => v.VisitMedicines)
+                .ThenInclude(vm => vm.Medicine)
+                .FirstOrDefaultAsync(v => v.Appointment.PatientId == PatientId && v.Id==visitId);
+        }
+
+        public async Task<List<Visit>?> GetAllVisitsForDoctor(int DoctorId,int? patientId)
+        {
+            if(patientId is not null)
+            {
+                return await _context.Visits
+                 .Include(v => v.XRayImages)
+                 .Include(v => v.Treatments)
+                 .Include(v => v.VisitMedicines)
+                 .ThenInclude(vm => vm.Medicine)
+                 .Include(v => v.Appointment).ThenInclude(a => a.Patient).ThenInclude(u => u.User)
+
+                 .Where(v => v.Appointment.DoctorId == DoctorId &&  v.Appointment.PatientId==patientId).ToListAsync();
+            }
+            return await _context.Visits
+                .Include(v => v.XRayImages)
+                .Include(v => v.Treatments)
+                .Include(v => v.VisitMedicines)
+                .ThenInclude(vm => vm.Medicine)
+                .Include(v => v.Appointment).ThenInclude(a => a.Patient).ThenInclude(u => u.User)
+                
+                .Where(v => v.Appointment.DoctorId == DoctorId).ToListAsync();
+        }
+
+        public async Task<Visit?> GetVisitDetailsForDoctr( int visitId)
+        {
+            return await _context.Visits
+                .Include(v => v.XRayImages)
+                .Include(v => v.Treatments)
+                .Include(v => v.VisitMedicines)
+                .ThenInclude(vm => vm.Medicine)
+                 .Include(v => v.Appointment).ThenInclude(a => a.Patient).ThenInclude(u => u.User)
+                .FirstOrDefaultAsync(v =>  v.Id == visitId);
+        }
 
     }
 }

@@ -15,7 +15,7 @@ namespace DentalClinic.DAL.Models
     {
         public int Id {  get; set; }
         public string? Notes {  get; set; }
-        public List<XRayImage> XRayImages { get; set; } 
+        public List<XRayImage>? XRayImages { get; set; } 
         public DateTime? NextAppointmentDate {  get; set; }
         public List<VisitTreatment> Treatments {  get; set; }
         public PaymentStatus PaymentStatus { get; set; }

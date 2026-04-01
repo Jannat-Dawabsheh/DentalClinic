@@ -74,6 +74,25 @@ namespace DentalClinic.BLL.MapsterConfiguration
             TypeAdapterConfig<AddVisitRequest, Visit>
             .NewConfig()
             .Map(dest => dest.VisitMedicines, src => src.Medicines);
+
+            TypeAdapterConfig<Visit, VisitDetailsForPatient>
+            .NewConfig()
+            .Map(dest => dest.XRayImages, source => source.XRayImages.Select(img => $"http://localhost:5238/images/{img.ImageName}").ToList())
+             .Map(dest => dest.Treatments, src => src.Treatments)
+            .Map(dest => dest.Medicines, src => src.VisitMedicines);
+
+            TypeAdapterConfig<Visit, VisitResponseForDoctor>
+         .NewConfig()
+          .Map(dest => dest.PatientId, src => src.Appointment.PatientId)
+         .Map(dest => dest.PatientName, src => src.Appointment.Patient.User.FullName);
+
+            TypeAdapterConfig<Visit, VisitDetailsForDoctor>
+            .NewConfig()
+            .Map(dest => dest.XRayImages, source => source.XRayImages.Select(img => $"http://localhost:5238/images/{img.ImageName}").ToList())
+             .Map(dest => dest.Treatments, src => src.Treatments)
+            .Map(dest => dest.Medicines, src => src.VisitMedicines)
+            .Map(dest => dest.PatientId, src => src.Appointment.PatientId)
+            .Map(dest => dest.PatientName, src => src.Appointment.Patient.User.FullName);
         }
     }
 }

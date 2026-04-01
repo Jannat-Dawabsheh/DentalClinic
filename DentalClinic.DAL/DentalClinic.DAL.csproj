@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <None Include="DTO\Request\Admin\UpdateDoctorRequest.cs" />
+    <None Include="DTO\Response\Patient\VisitDetailsForPatient.cs" />
   </ItemGroup>
 
 </Project>
