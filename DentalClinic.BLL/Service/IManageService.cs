@@ -16,6 +16,10 @@ namespace DentalClinic.BLL.Service
         Task<BaseResponse> CreateAsync(CreateDoctorRequest Request);
         Task<BaseResponse> UpdateDoctorAsync(int id, UpdateDoctorRequest request);
         Task<BaseResponse> DeleteDoctorAsync(int id);
-        
+        Task<DashboardSummary> GetDashboardSummaryAsync(int? mounth);
+        Task<AdminDashboardResponse> GetDashboardResponseAsync(int? mounth);
+       
+
+
     }
 }

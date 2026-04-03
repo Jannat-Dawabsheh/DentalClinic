@@ -12,31 +12,31 @@ namespace DentalClinic.PL.Areas.Admin
     [Authorize(Roles ="Admin")]
     public class ManagesController : ControllerBase
     {
-        private readonly IManageService _doctorService;
+        private readonly IManageService _manageService;
 
-        public ManagesController(IManageService doctorService)
+        public ManagesController(IManageService manageService)
         {
-            _doctorService = doctorService;
+            _manageService = manageService;
         }
 
         [HttpGet("")]
         public async Task<IActionResult> GetAllDoctors()
         {
-            var response = await _doctorService.GetAllDoctorsAsync();
+            var response = await _manageService.GetAllDoctorsAsync();
             return Ok(response);
         }
 
         [HttpPost("")]
         public async Task<IActionResult>CreateDoctor(CreateDoctorRequest request)
         {
-            var response=await _doctorService.CreateAsync(request);
+            var response=await _manageService.CreateAsync(request);
             return  Ok(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDoctor([FromRoute] int id)
         {
-            var result = await _doctorService.DeleteDoctorAsync(id);
+            var result = await _manageService.DeleteDoctorAsync(id);
             if (!result.Success)
             {
                 if (result.Message.Contains("Not Found"))
@@ -51,7 +51,7 @@ namespace DentalClinic.PL.Areas.Admin
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateDoctor([FromRoute] int id, [FromBody] UpdateDoctorRequest request)
         {
-            var result = await _doctorService.UpdateDoctorAsync(id, request);
+            var result = await _manageService.UpdateDoctorAsync(id, request);
             if (!result.Success)
             {
                 if (result.Message.Contains("Not Found"))
@@ -60,6 +60,21 @@ namespace DentalClinic.PL.Areas.Admin
                 }
                 return BadRequest(result);
             }
+            return Ok(result);
+        }
+
+
+        [HttpGet("DashboardSummury")]
+        public async Task<IActionResult> GetDashboardSummaryAsync([FromQuery] int? mounth)
+        {
+            var result=await _manageService.GetDashboardSummaryAsync(mounth);
+            return Ok(result);
+        }
+
+        [HttpGet("visitsDetails")]
+        public async Task<IActionResult> GetVisitsDetails([FromQuery] int? mounth)
+        {
+            var result = await _manageService.GetDashboardResponseAsync(mounth);
             return Ok(result);
         }
     }

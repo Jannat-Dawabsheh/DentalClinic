@@ -13,5 +13,7 @@ namespace DentalClinic.DAL.Repository
         Task<List<Doctor>> GetAllAsync();
         Task<Doctor?> FindByIdAsync(int id);
         Task<Doctor?> UpdateAsync(Doctor doctor);
+        Task<IQueryable<Visit>?> GetVisitsSummury(int? mounth);
+        Task<List<Visit>?> GetvisitsDetails(int? mounth);
     }
 }

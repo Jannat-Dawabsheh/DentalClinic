@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DAL.DTO.Request.Doctor;
+using DentalClinic.DAL.DTO.Request.Patient;
 using DentalClinic.DAL.DTO.Response.Admin;
 using DentalClinic.DAL.DTO.Response.Doctor;
 using DentalClinic.DAL.DTO.Response.Patient;
@@ -37,10 +38,12 @@ namespace DentalClinic.BLL.MapsterConfiguration
             .Map(dest => dest.ExperienceYears, src => src.Doctor.ExperienceYears)
             .Map(dest => dest.Specialization, src => src.Doctor.Specialization.Name);
 
-            TypeAdapterConfig<Appointment, AppointmentResponse>
-              .NewConfig()
-              .Map(dest => dest.StartDateTime, src => src.StartDateTime)
-              .Map(dest => dest.EndDateTime, src => src.EndDateTime);
+            //TypeAdapterConfig<Appointment, AppointmentResponse>
+            //  .NewConfig()
+            //  .Map(dest => dest.StartDateTime, src => src.StartDateTime)
+            //  .Map(dest => dest.EndDateTime, src => src.EndDateTime);
+
+
 
             TypeAdapterConfig<Appointment, AppointmentListResponseForPatient>
              .NewConfig()
@@ -93,6 +96,16 @@ namespace DentalClinic.BLL.MapsterConfiguration
             .Map(dest => dest.Medicines, src => src.VisitMedicines)
             .Map(dest => dest.PatientId, src => src.Appointment.PatientId)
             .Map(dest => dest.PatientName, src => src.Appointment.Patient.User.FullName);
+
+            TypeAdapterConfig<Visit, RecentVisitDto>
+             .NewConfig()
+              .Map(dest => dest.VisitId, src => src.Id)
+             .Map(dest => dest.PatientName, src => src.Appointment.Patient.User.FullName)
+             .Map(dest => dest.DoctorName, src => src.Appointment.Doctor.User.FullName)
+             .Map(dest => dest.VisitDate, src => src.CreatedAt)
+             .Map(dest => dest.PaidAmount, src => src.PaymentStatus == PaymentStatus.Paid? src.Treatments.Sum(t => t.Price): 0);
+
+            
         }
     }
 }

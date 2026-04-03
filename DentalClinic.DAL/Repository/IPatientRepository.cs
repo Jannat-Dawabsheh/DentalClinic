@@ -14,9 +14,10 @@ namespace DentalClinic.DAL.Repository
         Task<List<Doctor>> GetDoctorsBySpecialization(int id);
         Task<DoctorSchedules?> GetWorkingDayById(int Id);
         Task<List<Appointment>> GetBookedAppointments(int doctorId, DateTime date);
-        Task<Appointment> BookAppointment(Appointment Request);
+        Task<Appointment> BookAppointment(int doctorId, Appointment Request);
         Task<Patient?> FindByIdAsync(string id);
         Task<List<Appointment>?> GetAppointmentsForPatient(int patientId);
         Task<Patient?> FindByPatientIdAsync(int id);
+        Task<DoctorSchedules> isAvailable(int doctorId, DateTime startDate);
     }
 }

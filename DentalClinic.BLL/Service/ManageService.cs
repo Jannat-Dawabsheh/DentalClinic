@@ -20,19 +20,19 @@ namespace DentalClinic.BLL.Service
     public class ManageService : IManageService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IManageRepository _doctorRepository;
+        private readonly IManageRepository _manageRepository;
         private readonly IEmailSender _emailSender;
 
-        public ManageService(UserManager<ApplicationUser> userManager,IManageRepository doctorRepository, IEmailSender emailSender)
+        public ManageService(UserManager<ApplicationUser> userManager,IManageRepository manageRepository, IEmailSender emailSender)
         {
             _userManager = userManager;
-            _doctorRepository = doctorRepository;
+            _manageRepository = manageRepository;
             _emailSender = emailSender;
         }
 
         public async Task<List<DoctorResponse>> GetAllDoctorsAsync() 
         {
-            var doctors = await _doctorRepository.GetAllAsync();
+            var doctors = await _manageRepository.GetAllAsync();
             var response = doctors.Adapt<List<DoctorResponse>>();
             return response;
         }
@@ -66,7 +66,7 @@ namespace DentalClinic.BLL.Service
                     Gender = Request.Gender,
                     ExperienceYears = Request.ExperienceYears
                 };
-                var doctorResult= await _doctorRepository.CreateDoctor(doctor);
+                var doctorResult= await _manageRepository.CreateDoctor(doctor);
                 if (doctorResult is null)
                 {
                   await  _userManager.DeleteAsync(user);
@@ -105,7 +105,7 @@ namespace DentalClinic.BLL.Service
         {
             try
             {
-                var doctor = await _doctorRepository.FindByIdAsync(id);
+                var doctor = await _manageRepository.FindByIdAsync(id);
                 if (doctor is null)
                 {
                     return new BaseResponse
@@ -159,7 +159,7 @@ namespace DentalClinic.BLL.Service
 
              
             
-                await _doctorRepository.UpdateAsync(doctor);
+                await _manageRepository.UpdateAsync(doctor);
                 return new BaseResponse
                 {
                     Success = true,
@@ -181,7 +181,7 @@ namespace DentalClinic.BLL.Service
         {
             try
             {
-                var doctor = await _doctorRepository.FindByIdAsync(id);
+                var doctor = await _manageRepository.FindByIdAsync(id);
                 if (doctor is null)
                 {
                     return new BaseResponse
@@ -209,5 +209,33 @@ namespace DentalClinic.BLL.Service
             }
         }
    
+        public async Task<DashboardSummary> GetDashboardSummaryAsync(int? mounth)
+        {
+            var visits=await _manageRepository.GetVisitsSummury(mounth);
+
+            var summery = new DashboardSummary
+            {
+                TotalDoctors = visits.GroupBy(v => v.Appointment.DoctorId).Count(),
+                TotalPatients = visits.GroupBy(v => v.Appointment.PatientId).Count(),
+                TotalVisits = visits.Count(),
+                TotalRevenue = visits.Where(v=>v.PaymentStatus==PaymentStatus.Paid).Sum(vp => vp.Treatments.Sum(t => t.Price)),
+                OutstandingPayments = visits.Where(v => v.PaymentStatus == PaymentStatus.UnPaid).Sum(vp => vp.Treatments.Sum(t => t.Price)),
+            };
+            
+            return summery;
+        }
+
+        public async Task<AdminDashboardResponse> GetDashboardResponseAsync(int? mounth)
+        {
+            var visits=await _manageRepository.GetvisitsDetails(mounth);
+
+            var visitDetails = new AdminDashboardResponse
+            {
+                summary = await GetDashboardSummaryAsync(mounth),
+                recentVisits = visits.Adapt<List<RecentVisitDto>>()
+            };
+
+            return visitDetails;
+        }
     }    
 }

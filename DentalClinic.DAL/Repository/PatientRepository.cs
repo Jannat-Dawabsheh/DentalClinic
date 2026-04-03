@@ -58,8 +58,25 @@ namespace DentalClinic.DAL.Repository
   
         }
 
-        public async Task<Appointment> BookAppointment(Appointment Request)
+        public async Task<DoctorSchedules> isAvailable(int doctorId, DateTime startDate)
         {
+            var dayOfWeek = startDate.DayOfWeek;
+            return await _context.DoctorSchedules.FirstOrDefaultAsync(d => d.DoctorId == doctorId && d.DayOfWeek == dayOfWeek);
+
+        }
+
+        public async Task<Appointment> BookAppointment(int doctorId,Appointment Request)
+        {
+            var exists = await _context.Appointments.AnyAsync(a =>
+            a.DoctorId == doctorId &&
+            a.StartDateTime < Request.EndDateTime &&
+            a.EndDateTime > Request.StartDateTime
+);
+
+            if (exists)
+            {
+                throw new Exception("Slot already booked");
+            }
             await _context.Appointments.AddAsync(Request);
             await _context.SaveChangesAsync();
             return Request;

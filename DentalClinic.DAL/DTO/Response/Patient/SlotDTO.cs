@@ -8,8 +8,8 @@ namespace DentalClinic.DAL.DTO.Response.Patient
 {
     public class SlotDTO
     {
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
       //  public bool IsAvailable { get; set; }
     }
 }

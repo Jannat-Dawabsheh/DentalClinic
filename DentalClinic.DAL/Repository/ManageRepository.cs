@@ -3,6 +3,7 @@ using DentalClinic.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -50,6 +51,22 @@ namespace DentalClinic.DAL.Repository
             await _context.SaveChangesAsync();
             return doctor;
 
+        }
+
+        public async Task<IQueryable<Visit>?> GetVisitsSummury(int? mounth)
+        {
+            if (mounth.HasValue)
+            {
+                return _context.Visits.Where(v => v.CreatedAt.Month == mounth.Value && v.CreatedAt.Year == DateTime.Now.Year).AsQueryable();
+            }
+            return  _context.Visits.AsQueryable();
+           
+        }
+
+        public async Task<List<Visit>?> GetvisitsDetails(int? mounth)
+        {
+            return await _context.Visits.Include(v=>v.Treatments).Include(v => v.Appointment).ThenInclude(a=>a.Doctor).ThenInclude(a=>a.User)
+                .Include(v => v.Appointment).ThenInclude(a => a.Patient).ThenInclude(a => a.User).ToListAsync();
         }
     }
 }

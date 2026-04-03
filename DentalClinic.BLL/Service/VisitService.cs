@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DAL.DTO.Request.Doctor;
+using DentalClinic.DAL.DTO.Request.Patient;
 using DentalClinic.DAL.DTO.Response;
 using DentalClinic.DAL.DTO.Response.Doctor;
 using DentalClinic.DAL.DTO.Response.Patient;
@@ -56,7 +57,15 @@ namespace DentalClinic.BLL.Service
                 }
             }
 
-            await _visitRepository.Createvisit(visit);
+            var cratedVisit=await _visitRepository.Createvisit(visit);
+            //if (cratedVisit is not null) { 
+            //    var request=new BookAppointmentRequest
+            //    {
+            //        StartDateTime= (DateTime)cratedVisit.NextAppointmentDate,
+            //        EndDateTime= (DateTime)cratedVisit.NextAppointmentDate + cratedVisit.,
+
+            //    }
+            //}
             var user = await _userManager.FindByIdAsync(visit.CreatedBy);
             if (user is not null)
             {

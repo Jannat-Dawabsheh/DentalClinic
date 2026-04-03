@@ -53,10 +53,17 @@ namespace DentalClinic.PL.Areas.Patient
         [HttpPost("BookAppointment/{doctorId}")]
         public async Task<IActionResult> BookAppointment([FromRoute] int doctorId, [FromBody]BookAppointmentRequest request)
         {
+            if (!request.IsValid(out var error))
+            {
+                return BadRequest(error);
+            }
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var response = await _patientService.BookAppointment(userId, doctorId, request);
+                if (response == null) {
+                    return BadRequest("This appointment not found for this doctor or it is already booked");
+                }
                 return Ok(response);
             }
             catch (Exception ex) { 

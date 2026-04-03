@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using DentalClinic.DAL.DTO.Request.Patient;
+using DentalClinic.DAL.DTO.Response;
 using DentalClinic.DAL.DTO.Response.Admin;
 using DentalClinic.DAL.DTO.Response.Doctor;
 using DentalClinic.DAL.DTO.Response.Patient;
@@ -85,7 +86,7 @@ namespace DentalClinic.BLL.Service
 
                 var slotEnd = start.Add(TimeSpan.FromMinutes(workingDay.AppointmentDuration));
                 if (slotEnd > endOfDay) break;
-                slots.Add(new SlotDTO() { Start = start, End = slotEnd });
+                slots.Add(new SlotDTO() { StartDateTime = start, EndDateTime = slotEnd });
                 start = slotEnd;
 
             }
@@ -94,7 +95,7 @@ namespace DentalClinic.BLL.Service
 
             var bookedAppointments = await _patientRepository.GetBookedAppointments(workingDay.DoctorId, date);
 
-            slots = slots.Where(slot => !bookedAppointments.Any(a => a.StartDateTime < slot.End && a.EndDateTime > slot.Start)).ToList();
+            slots = slots.Where(slot => !bookedAppointments.Any(a => a.StartDateTime < slot.EndDateTime && a.EndDateTime > slot.StartDateTime)).ToList();
 
             return new AvilableSlotResponse()
             {
@@ -103,17 +104,33 @@ namespace DentalClinic.BLL.Service
                 Slots = slots
             };
         }
+
+
   
-        public async Task<AppointmentResponse>BookAppointment(string userId,int doctorId,BookAppointmentRequest request)
+        public async Task<AppointmentResponse?>BookAppointment(string userId,int doctorId,BookAppointmentRequest request)
         {
 
                 Doctor doctor = await _doctorRepository.FindByDoctorIdAsync(doctorId);
                 Patient patient = await _patientRepository.FindByIdAsync(userId);
-                var appointment = request.Adapt<Appointment>();
+               var doctorSchedual = await _patientRepository.isAvailable(doctorId, request.StartDateTime);
+               var slots = await GetAvilableSlots(doctorSchedual.Id);
+            var slot = new SlotDTO
+            {
+                StartDateTime = request.StartDateTime,
+                EndDateTime = request.EndDateTime,
+            };
+            if (!(slots.Slots.Any(s => s.StartDateTime == request.StartDateTime &&s.EndDateTime == request.EndDateTime)))
+            {
+                //throw new Exception("Selected time slot is not available");
+                return null;
+            }
+
+       
+            var appointment = request.Adapt<Appointment>();
                 appointment.DoctorId = doctorId;
                 appointment.PatientId = patient.Id;
                 appointment.Status = Status.Pending;
-                var response = await _patientRepository.BookAppointment(appointment);
+                var response = await _patientRepository.BookAppointment(doctorId,appointment);
                 await _emailSender.SendEmailAsync(doctor.User.Email, "New appointment", $"<p>Hello doctor..{doctor.User.UserName}, there is a new appointment request booked by patient : {patient.Id}</p>");
 
             return response.Adapt<AppointmentResponse>();
