@@ -8,10 +8,12 @@ using DentalClinic.DAL.Repository;
 using Mapster;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,16 +26,20 @@ namespace DentalClinic.BLL.Service
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDoctorRepository _doctorRepository;
         private readonly IPatientRepository _patientRepository;
+        private readonly IEmailSender _emailSender;
+        private readonly IPatientService _patientService;
 
         public VisitService(IFileService fileServices,IVisitRepository visitRepository,
             UserManager<ApplicationUser> userManager, IDoctorRepository doctorRepository,
-            IPatientRepository patientRepository)
+            IPatientRepository patientRepository, IEmailSender emailSender,IPatientService patientService)
         {
             _fileServices = fileServices;
             _visitRepository = visitRepository;
             _userManager = userManager;
             _doctorRepository = doctorRepository;
             _patientRepository = patientRepository;
+            _emailSender = emailSender;
+            _patientService = patientService;
         }
 
         public async Task<BaseResponse>CheckVisitData(int id,List<int>? medicineIds,DateTime? NextAppointmentDate)
@@ -57,15 +63,84 @@ namespace DentalClinic.BLL.Service
                 }
             }
 
-            var cratedVisit=await _visitRepository.Createvisit(visit);
-            //if (cratedVisit is not null) { 
-            //    var request=new BookAppointmentRequest
-            //    {
-            //        StartDateTime= (DateTime)cratedVisit.NextAppointmentDate,
-            //        EndDateTime= (DateTime)cratedVisit.NextAppointmentDate + cratedVisit.,
+            var createdVisit = await _visitRepository.Createvisit(visit);
+           
 
-            //    }
-            //}
+
+
+
+
+            if (createdVisit?.NextAppointmentDate != null)
+            {
+                var existingAppointment = await _visitRepository.GetAppointmentById(request.AppointmentId);
+
+                if (existingAppointment == null)
+                    throw new Exception("Appointment not found");
+
+                var doctorId = existingAppointment.DoctorId;
+                var patientId = existingAppointment.PatientId;
+
+                var appointmentDate = createdVisit.NextAppointmentDate.Value;
+                var dayOfWeek = appointmentDate.DayOfWeek;
+
+               
+
+             
+                var schedule = await _doctorRepository.GetWorkingDayForDoctorByDay(doctorId, appointmentDate.DayOfWeek);
+
+                if (schedule == null)
+                    throw new Exception("Doctor not working on this day");
+
+
+
+                var end = appointmentDate.AddMinutes(schedule.AppointmentDuration);
+
+                var doctorSchedual = await _patientRepository.isAvailable(doctorId, appointmentDate);
+
+                if (doctorSchedual == null)
+                    throw new Exception("Doctor schedule not found");
+
+                var slots = await _patientService.GetAvilableSlots(doctorSchedual.Id);
+
+                if (slots?.Slots == null || !(slots.Slots.Any(s =>s.StartDateTime <= appointmentDate && s.EndDateTime > appointmentDate)))
+                {
+                    throw new Exception("Selected time slot is not available");
+
+                }
+
+              
+
+                var appointmentRequest = new BookAppointmentRequest
+                {
+                    StartDateTime = appointmentDate,
+                    EndDateTime = end
+                };
+
+                if (appointmentRequest.IsValid(out var error))
+                {
+
+                    var appointment = appointmentRequest.Adapt<Appointment>();
+                    appointment.DoctorId = doctorId;
+                    appointment.PatientId = patientId;
+                    appointment.Status = Status.Confirmed;
+                    var response = await _patientRepository.BookAppointment(doctorId, appointment);
+
+                    Doctor doctor = await _doctorRepository.FindByDoctorIdAsync(doctorId);
+                    Patient patient = await _patientRepository.FindByPatientIdAsync(patientId); 
+
+                    await _emailSender.SendEmailAsync(patient.User.Email, "New appointment", $"<p>Hello {patient.User.UserName}, there is a new appointment  booked by doctor : {doctor.User.FullName}</p>");
+
+
+
+                }
+                else
+                {
+                    throw new Exception(error);
+                }
+            }
+
+
+
             var user = await _userManager.FindByIdAsync(visit.CreatedBy);
             if (user is not null)
             {

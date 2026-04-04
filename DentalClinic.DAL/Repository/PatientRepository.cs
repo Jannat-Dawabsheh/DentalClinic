@@ -1,5 +1,7 @@
 ﻿using Azure.Core;
 using DentalClinic.DAL.Data;
+using DentalClinic.DAL.DTO.Request.Patient;
+using DentalClinic.DAL.DTO.Response.Patient;
 using DentalClinic.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -103,6 +105,12 @@ namespace DentalClinic.DAL.Repository
         public async Task<Patient?> FindByPatientIdAsync(int id)
         {
             return await _context.Patients.Include(c => c.User).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<bool> hasConflict(Patient patient, BookAppointmentRequest request)
+
+        {
+           return await _context.Appointments.AnyAsync(a => a.PatientId == patient.Id && a.StartDateTime < request.EndDateTime && a.EndDateTime > request.StartDateTime);
         }
 
     }

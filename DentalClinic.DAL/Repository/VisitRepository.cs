@@ -140,5 +140,10 @@ namespace DentalClinic.DAL.Repository
                 .FirstOrDefaultAsync(v =>  v.Id == visitId);
         }
 
+        public async Task<Appointment?>GetAppointmentById(int Id)
+        {
+            return await _context.Appointments.Include(c => c.Doctor).Include(c=>c.Patient).FirstOrDefaultAsync(c => c.Id == Id);
+        }
+
     }
 }

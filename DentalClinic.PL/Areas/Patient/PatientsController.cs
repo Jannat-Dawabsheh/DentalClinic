@@ -67,7 +67,7 @@ namespace DentalClinic.PL.Areas.Patient
                 return Ok(response);
             }
             catch (Exception ex) { 
-              return BadRequest("This appointment has already booked");
+              return BadRequest("This appointment has already booked or you have another appointment at the same time");
             }
         }
 

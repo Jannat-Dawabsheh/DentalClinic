@@ -125,7 +125,12 @@ namespace DentalClinic.BLL.Service
                 return null;
             }
 
-       
+            var hasConflict = await _patientRepository.hasConflict(patient, request);
+
+            if (hasConflict)
+                throw new Exception("Patient already has an overlapping appointment");
+
+
             var appointment = request.Adapt<Appointment>();
                 appointment.DoctorId = doctorId;
                 appointment.PatientId = patient.Id;

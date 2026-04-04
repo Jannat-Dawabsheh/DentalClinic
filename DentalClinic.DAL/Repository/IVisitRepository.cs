@@ -16,5 +16,6 @@ namespace DentalClinic.DAL.Repository
         Task<Visit?> GetVisitDetailsForPatient(int PatientId, int visitId);
         Task<List<Visit>?> GetAllVisitsForDoctor(int DoctorId, int? patientId);
         Task<Visit?> GetVisitDetailsForDoctr(int visitId);
+        Task<Appointment?> GetAppointmentById(int Id);
     }
 }

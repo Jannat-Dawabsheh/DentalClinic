@@ -138,6 +138,16 @@ namespace DentalClinic.DAL.Repository
             }
         }
 
-
+        public async Task<DoctorSchedules?> GetWorkingDayForDoctorByDay(int doctorId,DayOfWeek dayOfWeek)
+        {
+            try
+            {
+                return await _context.DoctorSchedules.Include(d => d.Doctor).FirstOrDefaultAsync(d => d.DoctorId == doctorId && d.DayOfWeek==dayOfWeek);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

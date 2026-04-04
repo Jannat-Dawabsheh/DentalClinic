@@ -24,6 +24,7 @@ namespace DentalClinic.DAL.Repository
         Task<Appointment?> FindAppointmentByIdAsync(int id);
         Task<Patient> UpdatePatientData(Patient patient);
         Task<Patient?> GetPatientByNameOrId(int? id, String? Name);
+        Task<DoctorSchedules?> GetWorkingDayForDoctorByDay(int doctorId, DayOfWeek dayOfWeek);
 
     }
     

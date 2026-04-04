@@ -1,4 +1,5 @@
-﻿using DentalClinic.DAL.Models;
+﻿using DentalClinic.DAL.DTO.Request.Patient;
+using DentalClinic.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace DentalClinic.DAL.Repository
         Task<List<Appointment>?> GetAppointmentsForPatient(int patientId);
         Task<Patient?> FindByPatientIdAsync(int id);
         Task<DoctorSchedules> isAvailable(int doctorId, DateTime startDate);
+        Task<bool> hasConflict(Patient patient, BookAppointmentRequest request);
     }
 }
