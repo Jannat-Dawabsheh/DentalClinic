@@ -17,9 +17,7 @@ namespace DentalClinic.BLL.Service
         Task<List<DoctorResposeForPatient>> GetAllDoctorsAsync();
         Task<List<DoctorResposeForPatient>> GetDoctorsBySpecialization(int id, DayOfWeek? day);
         Task<List<DoctorWorkingDaysRespose>?> GetDoctorWorkingDays(int Id);
-        Task<AvilableSlotResponse?> GetAvilableSlots(int Id);
-        Task<AppointmentResponse?> BookAppointment(string patientId, int doctorId, BookAppointmentRequest request);
-        Task<List<AppointmentListResponseForPatient>?> GetPatientAppointments(string userId, Status? Status);
+
         
     
     }

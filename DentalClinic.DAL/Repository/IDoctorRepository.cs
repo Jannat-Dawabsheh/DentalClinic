@@ -18,10 +18,7 @@ namespace DentalClinic.DAL.Repository
         Task<DoctorSchedules> UpdateDayOfWork(DoctorSchedules doctorSchedules);
         Task DeleteAsync(DoctorSchedules doctorSchedules);
         IQueryable<DoctorSchedules> Query();
-        Task<List<Appointment>?> GetAppointmentsForDoctor(int doctorId);
 
-        Task<Appointment> UpdateAppointmentStatus(Appointment appointment);
-        Task<Appointment?> FindAppointmentByIdAsync(int id);
         Task<Patient> UpdatePatientData(Patient patient);
         Task<Patient?> GetPatientByNameOrId(int? id, String? Name);
         Task<DoctorSchedules?> GetWorkingDayForDoctorByDay(int doctorId, DayOfWeek dayOfWeek);

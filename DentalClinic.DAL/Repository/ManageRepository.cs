@@ -65,6 +65,12 @@ namespace DentalClinic.DAL.Repository
 
         public async Task<List<Visit>?> GetvisitsDetails(int? mounth)
         {
+
+            if (mounth.HasValue)
+            {
+                return await _context.Visits.Include(v => v.Treatments).Include(v => v.Appointment).ThenInclude(a => a.Doctor).ThenInclude(a => a.User)
+                .Include(v => v.Appointment).ThenInclude(a => a.Patient).ThenInclude(a => a.User).Where(v => v.CreatedAt.Month == mounth.Value && v.CreatedAt.Year == DateTime.Now.Year).ToListAsync();
+            }
             return await _context.Visits.Include(v=>v.Treatments).Include(v => v.Appointment).ThenInclude(a=>a.Doctor).ThenInclude(a=>a.User)
                 .Include(v => v.Appointment).ThenInclude(a => a.Patient).ThenInclude(a => a.User).ToListAsync();
         }

@@ -225,13 +225,13 @@ namespace DentalClinic.BLL.Service
             return summery;
         }
 
-        public async Task<AdminDashboardResponse> GetDashboardResponseAsync(int? mounth)
+        public async Task<AdminDashboardResponse> GetDashboardResponseAsync(int? month)
         {
-            var visits=await _manageRepository.GetvisitsDetails(mounth);
+            var visits=await _manageRepository.GetvisitsDetails(month);
 
             var visitDetails = new AdminDashboardResponse
             {
-                summary = await GetDashboardSummaryAsync(mounth),
+                summary = await GetDashboardSummaryAsync(month),
                 recentVisits = visits.Adapt<List<RecentVisitDto>>()
             };
 

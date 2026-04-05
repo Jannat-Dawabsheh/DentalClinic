@@ -37,6 +37,8 @@ namespace DentalClinic.PL
             Services.AddScoped<IVisitService, VisitService>();
             Services.AddScoped<IFileService, FileService>();
             Services.AddScoped<IMedicineRepository, MedicineRepository>();
+            Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            Services.AddScoped<IAppointmentService, AppointmentService>();
             Services.AddExceptionHandler<GlobalExceptionHandler>();
             Services.AddProblemDetails();
 

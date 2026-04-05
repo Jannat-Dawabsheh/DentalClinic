@@ -64,17 +64,17 @@ namespace DentalClinic.PL.Areas.Admin
         }
 
 
-        [HttpGet("DashboardSummury")]
-        public async Task<IActionResult> GetDashboardSummaryAsync([FromQuery] int? mounth)
+        [HttpGet("DashboardSummary")]
+        public async Task<IActionResult> GetDashboardSummaryAsync([FromQuery] int? month)
         {
-            var result=await _manageService.GetDashboardSummaryAsync(mounth);
+            var result=await _manageService.GetDashboardSummaryAsync(month);
             return Ok(result);
         }
 
         [HttpGet("visitsDetails")]
-        public async Task<IActionResult> GetVisitsDetails([FromQuery] int? mounth)
+        public async Task<IActionResult> GetVisitsDetails([FromQuery] int? month)
         {
-            var result = await _manageService.GetDashboardResponseAsync(mounth);
+            var result = await _manageService.GetDashboardResponseAsync(month);
             return Ok(result);
         }
     }

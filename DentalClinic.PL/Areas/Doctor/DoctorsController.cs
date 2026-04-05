@@ -15,10 +15,12 @@ namespace DentalClinic.PL.Areas.Doctor
     public class DoctorsController : ControllerBase
     {
         private readonly IDoctorServices _doctorServices;
+        private readonly IAppointmentService _appointmentService;
 
-        public DoctorsController(IDoctorServices doctorServices)
+        public DoctorsController(IDoctorServices doctorServices,IAppointmentService appointmentService)
         {
             _doctorServices = doctorServices;
+            _appointmentService = appointmentService;
         }
 
         [HttpGet("")]
@@ -68,7 +70,7 @@ namespace DentalClinic.PL.Areas.Doctor
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 
-            var result = await _doctorServices.GetDoctorAppointments(userId, Status);
+            var result = await _appointmentService.GetDoctorAppointments(userId, Status);
             return Ok(result);
         }
 
@@ -77,7 +79,7 @@ namespace DentalClinic.PL.Areas.Doctor
         public async Task<IActionResult> UpdateAppointmentStatus([FromBody] UpdateAppointmentRequest request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = await _doctorServices.UpdateAppointmentStatus(request,userId);
+            var result = await _appointmentService.UpdateAppointmentStatus(request,userId);
             return Ok(result);
         }
 

@@ -303,13 +303,13 @@
   {
     "ContainingType": "DentalClinic.PL.Areas.Admin.ManagesController",
     "Method": "GetDashboardSummaryAsync",
-    "RelativePath": "api/Manages/DashboardSummury",
+    "RelativePath": "api/Manages/DashboardSummary",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "mounth",
+        "Name": "month",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }
@@ -325,7 +325,7 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "mounth",
+        "Name": "month",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       }

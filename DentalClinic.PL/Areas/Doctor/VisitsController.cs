@@ -17,11 +17,13 @@ namespace DentalClinic.PL.Areas.Doctor
     {
         private readonly IVisitService _visitService;
         private readonly IDoctorServices _doctorServices;
+        private readonly IAppointmentService _appointmentService;
 
-        public VisitsController(IVisitService visitService,IDoctorServices doctorServices)
+        public VisitsController(IVisitService visitService,IDoctorServices doctorServices,IAppointmentService appointmentService)
         {
             _visitService = visitService;
             _doctorServices = doctorServices;
+            _appointmentService = appointmentService;
         }
 
         [HttpPost("")]
@@ -43,7 +45,7 @@ namespace DentalClinic.PL.Areas.Doctor
                 id = request.AppointmentId,
                 status = Status.Completed
             };
-            await _doctorServices.UpdateAppointmentStatus(updateRequest, userId);
+            await _appointmentService.UpdateAppointmentStatus(updateRequest, userId);
             return Ok(response);
         }
 

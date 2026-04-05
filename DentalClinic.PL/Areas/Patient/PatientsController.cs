@@ -13,10 +13,12 @@ namespace DentalClinic.PL.Areas.Patient
     public class PatientsController : ControllerBase
     {
         private readonly IPatientService _patientService;
+        private readonly IAppointmentService _appointmentService;
 
-        public PatientsController(IPatientService patientService)
+        public PatientsController(IPatientService patientService,IAppointmentService appointmentService)
         {
             _patientService = patientService;
+            _appointmentService = appointmentService;
         }
         [HttpGet("Doctors")]
         public async Task<IActionResult> GetAllDoctors()
@@ -44,7 +46,7 @@ namespace DentalClinic.PL.Areas.Patient
         [HttpGet("Doctors/workingDaySlots/{id}")]
         public async Task<IActionResult> GetWorkingDaySlot([FromRoute] int id)
         {
-            var response = await _patientService.GetAvilableSlots(id);
+            var response = await _appointmentService.GetAvilableSlots(id);
             return Ok(response);
         }
 
@@ -60,7 +62,7 @@ namespace DentalClinic.PL.Areas.Patient
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var response = await _patientService.BookAppointment(userId, doctorId, request);
+                var response = await _appointmentService.BookAppointment(userId, doctorId, request);
                 if (response == null) {
                     return BadRequest("This appointment not found for this doctor or it is already booked");
                 }
@@ -78,7 +80,7 @@ namespace DentalClinic.PL.Areas.Patient
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 
-            var result = await _patientService.GetPatientAppointments(userId, Status);
+            var result = await _appointmentService.GetPatientAppointments(userId, Status);
             return Ok(result);
         }
     }
