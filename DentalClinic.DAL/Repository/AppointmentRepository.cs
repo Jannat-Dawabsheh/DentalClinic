@@ -20,7 +20,7 @@ namespace DentalClinic.DAL.Repository
         }
         public async Task<List<Appointment>> GetBookedAppointments(int doctorId, DateTime date)
         {
-            return await _context.Appointments.Where(a => a.DoctorId == doctorId && a.StartDateTime.Date == date.Date).ToListAsync();
+            return await _context.Appointments.Where(a => a.DoctorId == doctorId && a.StartDateTime.Date == date.Date && (a.Status==Status.Confirmed || a.Status == Status.Pending)).ToListAsync();
 
         }
 
@@ -35,8 +35,9 @@ namespace DentalClinic.DAL.Repository
             var exists = await _context.Appointments.AnyAsync(a =>
             a.DoctorId == doctorId &&
             a.StartDateTime < Request.EndDateTime &&
-            a.EndDateTime > Request.StartDateTime
-);
+            a.EndDateTime > Request.StartDateTime &&
+            (a.Status == Status.Pending || a.Status == Status.Confirmed)
+             );
 
             if (exists)
             {
@@ -61,7 +62,7 @@ namespace DentalClinic.DAL.Repository
         public async Task<bool> hasConflict(Patient patient, BookAppointmentRequest request)
 
         {
-            return await _context.Appointments.AnyAsync(a => a.PatientId == patient.Id && a.StartDateTime < request.EndDateTime && a.EndDateTime > request.StartDateTime);
+            return await _context.Appointments.AnyAsync(a => a.PatientId == patient.Id && a.StartDateTime < request.EndDateTime && a.EndDateTime > request.StartDateTime && (a.Status == Status.Pending || a.Status == Status.Confirmed));
         }
 
 
@@ -89,6 +90,12 @@ namespace DentalClinic.DAL.Repository
         public async Task<Appointment?> FindAppointmentByIdAsync(int id)
         {
             return await _context.Appointments.Include(d => d.Doctor).ThenInclude(u => u.User).Include(p => p.Patient).ThenInclude(u => u.User).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task DeleteAppointmentByPatient(Appointment appointment)
+        {
+             _context.Appointments.Remove(appointment);   
+            await _context.SaveChangesAsync();
         }
 
     }

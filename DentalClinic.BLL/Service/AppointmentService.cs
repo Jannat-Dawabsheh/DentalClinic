@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -77,11 +78,7 @@ namespace DentalClinic.BLL.Service
             Patient patient = await _patientRepository.FindByIdAsync(userId);
             var doctorSchedual = await _appointmentRepository.isAvailable(doctorId, request.StartDateTime);
             var slots = await GetAvilableSlots(doctorSchedual.Id);
-            var slot = new SlotDTO
-            {
-                StartDateTime = request.StartDateTime,
-                EndDateTime = request.EndDateTime,
-            };
+      
             if (!(slots.Slots.Any(s => s.StartDateTime == request.StartDateTime && s.EndDateTime == request.EndDateTime)))
             {
                 //throw new Exception("Selected time slot is not available");
@@ -214,7 +211,70 @@ namespace DentalClinic.BLL.Service
             }
         }
 
+        public async Task<BaseResponse>DeleteAppointmentByPatient(string userId,int appointmentId)
+        {
+            var patient=await _patientRepository.FindByIdAsync(userId);
+            if(patient is null)
+            {
+                return new BaseResponse
+                {
+                    Success = false,
+                    Message = "Patient not found"
+                };
+            }
+            var appointment=await _appointmentRepository.FindAppointmentByIdAsync(appointmentId);
 
+            if (appointment is null)
+            {
+                return new BaseResponse
+                {
+                    Success = false,
+                    Message = "appointment not found"
+                };
+            }
+
+            try
+            {
+                if (appointment.Patient.UserId != userId)
+                {
+                    return new BaseResponse
+                    {
+                        Success = false,
+                        Message = "you can't delete this appointment"
+                    };
+                }
+
+                if (appointment.Status != Status.Pending)
+                {
+                    return new BaseResponse
+                    {
+                        Success = false,
+                        Message = "Only pending appointments can be cancelled by the patient"
+                    };
+                }
+
+                appointment.Status = Status.Cancelled;
+
+                await _appointmentRepository.UpdateAppointmentStatus(appointment);
+                await _emailSender.SendEmailAsync(appointment.Doctor.User.Email, "Delet appointment", $"<p>Hello doctor..{appointment.Doctor.User.UserName}, Patient {patient.User.UserName} cancelled the appointment request at {appointment.StartDateTime} </p>");
+
+
+                return new BaseResponse
+                {
+                    Success = true,
+                    Message = "Appointment deleted successfully"
+                };
+
+            }
+            catch (Exception ex) {
+                
+                    return new BaseResponse
+                    {
+                        Success = false,
+                        Message = ex.Message
+                    };
+                }
+        }
 
 
     }

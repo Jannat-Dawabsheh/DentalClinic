@@ -49,8 +49,8 @@ namespace DentalClinic.DAL.Data
             builder.Entity<DoctorSchedules>().HasIndex(e => new { e.DoctorId, e.DayOfWeek }).IsUnique();
             builder.Entity<Appointment>().HasOne(d => d.Doctor).WithMany().HasForeignKey(d => d.DoctorId).OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Appointment>().HasOne(d => d.Patient).WithMany().HasForeignKey(d => d.PatientId).OnDelete(DeleteBehavior.Restrict); 
-            builder.Entity<Appointment>().HasIndex(a => new { a.DoctorId, a.StartDateTime }).IsUnique();
-            builder.Entity<Appointment>().HasIndex(a => new { a.PatientId, a.StartDateTime }).IsUnique();
+            builder.Entity<Appointment>().HasIndex(a => new { a.DoctorId, a.StartDateTime }).IsUnique().HasFilter("[Status] IN (0,1)");
+            builder.Entity<Appointment>().HasIndex(a => new { a.PatientId, a.StartDateTime }).IsUnique().HasFilter("[Status] IN (0,1)"); 
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

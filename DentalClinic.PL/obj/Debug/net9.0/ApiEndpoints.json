@@ -376,6 +376,22 @@
   },
   {
     "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
+    "Method": "DeleteAppointmentByPatient",
+    "RelativePath": "api/Patients/Appointments/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Patient.PatientsController",
     "Method": "BookAppointment",
     "RelativePath": "api/Patients/BookAppointment/{doctorId}",
     "HttpMethod": "POST",

@@ -83,5 +83,16 @@ namespace DentalClinic.PL.Areas.Patient
             var result = await _appointmentService.GetPatientAppointments(userId, Status);
             return Ok(result);
         }
+
+        [HttpDelete("Appointments/{id}")]
+
+        public async Task<IActionResult> DeleteAppointmentByPatient([FromRoute] int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+            var result = await _appointmentService.DeleteAppointmentByPatient(userId, id);
+            return Ok(result);
+        }
     }
 }

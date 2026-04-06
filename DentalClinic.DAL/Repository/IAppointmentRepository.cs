@@ -19,5 +19,6 @@ namespace DentalClinic.DAL.Repository
 
         Task<Appointment> UpdateAppointmentStatus(Appointment appointment);
         Task<Appointment?> FindAppointmentByIdAsync(int id);
+        Task DeleteAppointmentByPatient(Appointment appointment);
     }
 }

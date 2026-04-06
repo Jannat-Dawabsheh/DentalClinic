@@ -38,12 +38,6 @@ namespace DentalClinic.BLL.MapsterConfiguration
             .Map(dest => dest.ExperienceYears, src => src.Doctor.ExperienceYears)
             .Map(dest => dest.Specialization, src => src.Doctor.Specialization.Name);
 
-            //TypeAdapterConfig<Appointment, AppointmentResponse>
-            //  .NewConfig()
-            //  .Map(dest => dest.StartDateTime, src => src.StartDateTime)
-            //  .Map(dest => dest.EndDateTime, src => src.EndDateTime);
-
-
 
             TypeAdapterConfig<Appointment, AppointmentListResponseForPatient>
              .NewConfig()

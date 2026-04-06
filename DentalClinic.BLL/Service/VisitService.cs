@@ -93,6 +93,10 @@ namespace DentalClinic.BLL.Service
                     if (existingAppointment == null)
                         throw new Exception("Appointment not found");
 
+
+                    if (existingAppointment.Status != Status.Confirmed)
+                        throw new Exception("Appointment is not in a valid state");
+
                     var doctorId = existingAppointment.DoctorId;
                     var patientId = existingAppointment.PatientId;
 
