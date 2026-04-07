@@ -20,5 +20,8 @@ namespace DentalClinic.DAL.Repository
         Task<Appointment> UpdateAppointmentStatus(Appointment appointment);
         Task<Appointment?> FindAppointmentByIdAsync(int id);
         Task DeleteAppointmentByPatient(Appointment appointment);
+        Task<List<Appointment>?> GetAppointmentsForDoctorInSpecificDay(int doctorId, DateTime date);
+        Task<bool> CancelRangeOfAppointments(List<Appointment> appointments);
+        Task<List<Appointment>?> GetFutureAppointmentsForDoctorInSpecificDay(int doctorId, DayOfWeek day);
     }
 }

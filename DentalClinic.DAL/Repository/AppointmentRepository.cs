@@ -1,5 +1,6 @@
 ﻿using DentalClinic.DAL.Data;
 using DentalClinic.DAL.DTO.Request.Patient;
+using DentalClinic.DAL.DTO.Response;
 using DentalClinic.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -96,6 +97,59 @@ namespace DentalClinic.DAL.Repository
         {
              _context.Appointments.Remove(appointment);   
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Appointment>?> GetAppointmentsForDoctorInSpecificDay(int doctorId,DateTime date)
+        {
+            try
+            {
+                return await _context.Appointments.Include(d => d.Doctor).ThenInclude(p => p.User).Include(p=>p.Patient).ThenInclude(p=>p.User).Where(a=>a.StartDateTime.Date==date.Date && a.DoctorId == doctorId).ToListAsync();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        public async Task<bool>CancelRangeOfAppointments(List<Appointment> appointments)
+        {
+            try
+            {
+                _context.Appointments.UpdateRange(appointments);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex) { 
+            return false;
+            }
+        }
+
+        public async Task<List<Appointment>?> GetFutureAppointmentsForDoctorInSpecificDay(int doctorId, DayOfWeek day)
+        {
+            try
+            {
+                var today = DateTime.Today;
+                var endDate = today.AddDays(8);
+
+                var appointments = await _context.Appointments
+                    .Include(d => d.Doctor).ThenInclude(p => p.User)
+                    .Include(p => p.Patient).ThenInclude(p => p.User)
+                    .Where(a =>
+                        a.DoctorId == doctorId &&
+                        a.StartDateTime >= today &&
+                        a.StartDateTime < endDate
+                    )
+                    .ToListAsync();
+
+                return appointments
+                    .Where(a => a.StartDateTime.DayOfWeek == day)
+                    .ToList();
+           
+            }
+            catch
+            {
+                return null;
+            }
         }
 
     }

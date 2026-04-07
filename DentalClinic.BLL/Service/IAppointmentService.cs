@@ -20,5 +20,6 @@ namespace DentalClinic.BLL.Service
         Task<List<AppointmentListResponse>?> GetDoctorAppointments(string userId, Status? Status);
         Task<BaseResponse> UpdateAppointmentStatus(UpdateAppointmentRequest request, string userId);
         Task<BaseResponse> DeleteAppointmentByPatient(string userId, int appointmentId);
+        DateTime GetNextDayOfWeek(DayOfWeek targetDay);
     }
 }

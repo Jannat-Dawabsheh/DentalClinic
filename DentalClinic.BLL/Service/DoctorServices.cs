@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,12 +24,18 @@ namespace DentalClinic.BLL.Service
         private readonly IDoctorRepository _doctorRepository;
         private readonly IEmailSender _emailSender;
         private readonly IPatientRepository _patientRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IAppointmentService _appointmentService;
 
-        public DoctorServices(IDoctorRepository doctorRepository, IEmailSender emailSender, IPatientRepository patientRepository)
+        public DoctorServices(IDoctorRepository doctorRepository, IEmailSender emailSender,
+            IPatientRepository patientRepository, IAppointmentRepository appointmentRepository,
+            IAppointmentService appointmentService)
         {
             _doctorRepository = doctorRepository;
             _emailSender = emailSender;
             _patientRepository = patientRepository;
+            _appointmentRepository = appointmentRepository;
+            _appointmentService = appointmentService;
         }
 
         public async Task<List<DoctorScheduleResponse>?>GetDoctorWorkingDays(string userId)
@@ -138,6 +145,45 @@ namespace DentalClinic.BLL.Service
 
 
                 await _doctorRepository.UpdateDayOfWork(workingDay);
+
+
+                var appointments = await _appointmentRepository.GetFutureAppointmentsForDoctorInSpecificDay(workingDay.DoctorId, workingDay.DayOfWeek);
+                if (appointments == null || !appointments.Any())
+                {
+                    return new BaseResponse
+                    {
+                        Success = true,
+                        Message = "Working day updated (no affected appointments)"
+                    };
+                }
+
+                var invalidAppointments = appointments.Where(a => a.StartDateTime.TimeOfDay < workingDay.StartTime || a.StartDateTime.AddMinutes(workingDay.AppointmentDuration).TimeOfDay > workingDay.EndTime).ToList();
+
+                if (invalidAppointments.Any())
+                {
+
+
+
+
+                    foreach (var appointment in invalidAppointments)
+                    {
+                        appointment.Status = Status.Cancelled;
+
+                    }
+                    var success = await _appointmentRepository.CancelRangeOfAppointments(invalidAppointments);
+
+                    if (success)
+                    {
+                        var emailTasks = invalidAppointments.Select(a => _emailSender.SendEmailAsync(a.Patient.User.Email,
+                                          "Canceled appointment",
+                                         $"<p>Hello {a.Patient.User.UserName}, your appointment on {a.StartDateTime:yyyy-MM-dd HH:mm} was cancelled due to updated working hours.</p>"
+                                            )
+                                        );
+
+                        await Task.WhenAll(emailTasks);
+                    }
+
+                }
                 return new BaseResponse
                 {
                     Success = true,
@@ -171,6 +217,29 @@ namespace DentalClinic.BLL.Service
                 }
 
                 await _doctorRepository.DeleteAsync(workingDay);
+                var date = _appointmentService.GetNextDayOfWeek(workingDay.DayOfWeek);
+                var appointments= await _appointmentRepository.GetAppointmentsForDoctorInSpecificDay(workingDay.DoctorId, date);
+                if(appointments != null && appointments.Any())
+                {
+                    foreach (var appointment in appointments)
+                    {
+                        appointment.Status = Status.Cancelled;
+
+                    }
+                    var success=await _appointmentRepository.CancelRangeOfAppointments(appointments);
+
+                    if(success)
+                    {
+                        var emailTasks = appointments.Select(a => _emailSender.SendEmailAsync(a.Patient.User.Email,
+                                          "Canceled appointment",
+                                           $"<p>Hello {a.Patient.User.UserName}, your appointment booked by doctor {a.Doctor.User.UserName} in day {date.Date} cancelled you can book another one </p>"
+                                            )
+                                        );
+
+                        await Task.WhenAll(emailTasks);
+                    }
+                }
+
                 return new BaseResponse
                 {
                     Success = true,
@@ -182,7 +251,7 @@ namespace DentalClinic.BLL.Service
                 return new BaseResponse
                 {
                     Success = false,
-                    Message = "Can't workingDay Doctor",
+                    Message = "Failed to delete working day",
                     Errors = new List<string> { ex.Message }
                 };
             }
