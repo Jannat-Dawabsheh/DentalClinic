@@ -80,7 +80,7 @@ namespace DentalClinic.BLL.Service
             
                  var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 token = Uri.EscapeDataString(token);
-                var emailUrl = $"http://localhost:5238/api/auth/Accounts/ConfirmEmail?token={token}&userId={user.Id}";
+                var emailUrl = $"https://dentalclinic.runasp.net/api/auth/Accounts/ConfirmEmail?token={token}&userId={user.Id}";
                 await _emailSender.SendEmailAsync(user.Email, "welcome", $"<h1>welcome doctor..{user.UserName}, your password is {Request.Password}</h1>" + $"<a href='{emailUrl}'>confirm email</a>");
                 return new BaseResponse()
                 {

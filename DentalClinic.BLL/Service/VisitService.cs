@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DAL.Data;
+using DentalClinic.DAL.DTO.Request;
 using DentalClinic.DAL.DTO.Request.Doctor;
 using DentalClinic.DAL.DTO.Request.Patient;
 using DentalClinic.DAL.DTO.Response;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,12 +36,13 @@ namespace DentalClinic.BLL.Service
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IAppointmentService _appointmentService;
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<VisitService> _logger;
 
         public VisitService(IFileService fileServices,IVisitRepository visitRepository,
             UserManager<ApplicationUser> userManager, IDoctorRepository doctorRepository,
             IPatientRepository patientRepository, IEmailSender emailSender,IPatientService patientService,
             IAppointmentRepository appointmentRepository,IAppointmentService appointmentService,
-            ApplicationDbContext context)
+            ApplicationDbContext context, ILogger<VisitService> logger)
         {
             _fileServices = fileServices;
             _visitRepository = visitRepository;
@@ -51,6 +54,7 @@ namespace DentalClinic.BLL.Service
             _appointmentRepository = appointmentRepository;
             _appointmentService = appointmentService;
             _context = context;
+            _logger = logger;
         }
 
         public async Task<BaseResponse>CheckVisitData(int id,List<int>? medicineIds,DateTime? NextAppointmentDate)
@@ -88,19 +92,37 @@ namespace DentalClinic.BLL.Service
 
                 if (request.NextAppointmentDate.HasValue)
                 {
+                  
+
                     var existingAppointment = await _visitRepository.GetAppointmentById(request.AppointmentId);
 
                     if (existingAppointment == null)
-                        throw new Exception("Appointment not found");
+                    {
+                        _logger.LogWarning("Appointment not found for ID: {AppointmentId}", request.AppointmentId);
 
+                        throw new BadRequestException($"No appointment found with ID {request.AppointmentId}");
+                    }
 
                     if (existingAppointment.Status != Status.Confirmed)
-                        throw new Exception("Appointment is not in a valid state");
+                    {
+                        _logger.LogWarning("Appointment is not in a valid state");
+
+                        throw new BadRequestException("Appointment is not in a valid state");
+                    }
 
                     var doctorId = existingAppointment.DoctorId;
                     var patientId = existingAppointment.PatientId;
 
                     var appointmentDate = request.NextAppointmentDate.Value;
+
+                    if (appointmentDate <= DateTime.Now)
+                    {
+                        _logger.LogWarning("Cannot book in the past");
+
+                        throw new BadRequestException("Cannot book in the past");
+                    }
+
+
                     var dayOfWeek = appointmentDate.DayOfWeek;
 
 
@@ -109,7 +131,12 @@ namespace DentalClinic.BLL.Service
                     var schedule = await _doctorRepository.GetWorkingDayForDoctorByDay(doctorId, appointmentDate.DayOfWeek);
 
                     if (schedule == null)
-                        throw new Exception("Doctor not working on this day");
+                    {
+                        _logger.LogWarning("Doctor not working on this day");
+
+                        throw new BadRequestException("Doctor not working on this day");
+                    }
+                   
 
 
 
@@ -118,13 +145,19 @@ namespace DentalClinic.BLL.Service
                     var doctorSchedual = await _appointmentRepository.isAvailable(doctorId, appointmentDate);
 
                     if (doctorSchedual == null)
-                        throw new Exception("Doctor schedule not found");
-
-                    var slots = await _appointmentService.GetAvilableSlots(doctorSchedual.Id);
-
-                    if (slots?.Slots == null || !(slots.Slots.Any(s => s.StartDateTime <= appointmentDate && s.EndDateTime > appointmentDate)))
                     {
-                        throw new Exception("Selected time slot is not available");
+                        _logger.LogWarning("Doctor schedule not found");
+
+                        throw new BadRequestException("Doctor schedule not found");
+                    }
+              
+
+                    var slots = await _appointmentService.GetAvilableSlotsForDoctor(doctorSchedual.Id,appointmentDate);
+
+                    if (slots?.Slots == null || !(slots.Slots.Any(s => appointmentDate >= s.StartDateTime && appointmentDate < s.EndDateTime)))
+                    {
+                        _logger.LogWarning("Selected time slot is not available");
+                        throw new BadRequestException("Selected time slot is not available");
 
                     }
 
@@ -136,10 +169,13 @@ namespace DentalClinic.BLL.Service
                         EndDateTime = end
                     };
 
-                    if (appointmentRequest.IsValid(out var error))
+                    if (!appointmentRequest.IsValid(out var error))
                     {
+                        _logger.LogWarning("Invalid appointment request: {Error}", error);
+                        throw new BadRequestException(error);
+                    }
 
-                        appointment = appointmentRequest.Adapt<Appointment>();
+                    appointment = appointmentRequest.Adapt<Appointment>();
                         appointment.DoctorId = doctorId;
                         appointment.PatientId = patientId;
                         appointment.Status = Status.Confirmed;
@@ -150,7 +186,7 @@ namespace DentalClinic.BLL.Service
 
 
 
-                    }
+                    
 
                 }
 
@@ -163,9 +199,9 @@ namespace DentalClinic.BLL.Service
 
                     await transaction.CommitAsync();
 
-                    if (appointment != null)
+                    if (appointment != null && patient?.User != null && doctor?.User != null)
                     {
-                        await _emailSender.SendEmailAsync(patient.User.Email, "New appointment",
+                    await _emailSender.SendEmailAsync(patient.User.Email, "New appointment",
                             $"<p>Hello {patient.User.UserName}, there is a new appointment booked by doctor: {doctor.User.FullName}</p>"
                         );
                     }
@@ -180,9 +216,10 @@ namespace DentalClinic.BLL.Service
                     return visit.Adapt<VisitResponse>();
                 
             }
-            catch
+            catch(Exception ex) 
             {
                 await transaction.RollbackAsync();
+                _logger.LogError(ex, "Error while creating visit");
                 throw;
             }
 
@@ -228,9 +265,9 @@ namespace DentalClinic.BLL.Service
             if (visit is null )
                 return null;
 
-            var user = await _userManager.FindByIdAsync(visit.CreatedBy);
+            //var user = await _userManager.FindByIdAsync(visit.CreatedBy);
 
-            visit.CreatedBy = user.FullName;
+            //visit.CreatedBy = user.FullName;
             
 
             return visit.Adapt<VisitDetailsForPatient>();
@@ -259,10 +296,11 @@ namespace DentalClinic.BLL.Service
             var visit = await _visitRepository.GetVisitDetailsForDoctr(visitId);
             if (visit is null)
                 return null;
+            //Console.WriteLine($"CreatedBy ID: {visit.CreatedBy}");
 
-            var user = await _userManager.FindByIdAsync(visit.CreatedBy);
+            //var user = await _userManager.FindByIdAsync(visit.CreatedBy);
 
-            visit.CreatedBy = user.FullName;
+            //visit.CreatedBy = user.FullName;
 
 
             return visit.Adapt<VisitDetailsForDoctor>();

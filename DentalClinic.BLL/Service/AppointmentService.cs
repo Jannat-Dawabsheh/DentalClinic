@@ -1,4 +1,6 @@
-﻿using DentalClinic.DAL.DTO.Request.Doctor;
+﻿using Azure.Core;
+using DentalClinic.DAL.DTO.Request;
+using DentalClinic.DAL.DTO.Request.Doctor;
 using DentalClinic.DAL.DTO.Request.Patient;
 using DentalClinic.DAL.DTO.Response;
 using DentalClinic.DAL.DTO.Response.Doctor;
@@ -70,6 +72,50 @@ namespace DentalClinic.BLL.Service
         }
 
 
+        public async Task<AvilableSlotResponse?> GetAvilableSlotsForDoctor(int id, DateTime selectedDate)
+        {
+            var workingDay = await _patientRepository.GetWorkingDayById(id);
+
+            var date = selectedDate.Date;
+
+            if (workingDay.DayOfWeek != date.DayOfWeek)
+            {
+
+                throw new BadRequestException("Doctor does not work on this day");
+            }
+
+            var start = date.Add(workingDay.StartTime);
+            var endOfDay = date.Add(workingDay.EndTime);
+
+            var slots = new List<SlotDTO>();
+
+            while (start < endOfDay)
+            {
+                var slotEnd = start.Add(TimeSpan.FromMinutes(workingDay.AppointmentDuration));
+                if (slotEnd > endOfDay) break;
+
+                slots.Add(new SlotDTO
+                {
+                    StartDateTime = start,
+                    EndDateTime = slotEnd
+                });
+
+                start = slotEnd;
+            }
+
+            var bookedAppointments =
+                await _appointmentRepository.GetBookedAppointments(workingDay.DoctorId, date);
+
+            slots = slots
+                .Where(slot => !bookedAppointments.Any(a => a.StartDateTime < slot.EndDateTime && a.EndDateTime > slot.StartDateTime)).ToList();
+
+            return new AvilableSlotResponse
+            {
+                DoctorId = workingDay.DoctorId,
+                Date = date,
+                Slots = slots
+            };
+        }
 
         public async Task<AppointmentResponse?> BookAppointment(string userId, int doctorId, BookAppointmentRequest request)
         {
@@ -81,14 +127,14 @@ namespace DentalClinic.BLL.Service
       
             if (!(slots.Slots.Any(s => s.StartDateTime == request.StartDateTime && s.EndDateTime == request.EndDateTime)))
             {
-                //throw new Exception("Selected time slot is not available");
-                return null;
+                throw new BadRequestException("Selected time slot is not available");
+                //return null;
             }
 
             var hasConflict = await _appointmentRepository.hasConflict(patient, request);
 
             if (hasConflict)
-                throw new Exception("Patient already has an overlapping appointment");
+                throw new BadRequestException("Patient already has an overlapping appointment");
 
 
             var appointment = request.Adapt<Appointment>();

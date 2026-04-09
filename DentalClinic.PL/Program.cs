@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 namespace DentalClinic.PL
@@ -87,6 +88,16 @@ namespace DentalClinic.PL
             //    options.RequestCultureProviders.Add(new QueryStringRequestCultureProvider { QueryStringKey = "lang" });
             //});
             //builder.Services.AddEndpointsApiExplorer();
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .WriteTo.Console()
+                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
+
+
             AppConfiguration.Config(builder.Services);
             MapsterConfig.MapsterConfigRegister();
             var app = builder.Build();
@@ -100,7 +111,7 @@ namespace DentalClinic.PL
 
             app.UseCors(MyAllowSpecificOrigins);
 
-            //app.UseExceptionHandler();
+            app.UseExceptionHandler();
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseAuthentication();

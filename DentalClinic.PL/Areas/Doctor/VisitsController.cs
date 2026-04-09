@@ -29,11 +29,21 @@ namespace DentalClinic.PL.Areas.Doctor
         [HttpPost("")]
         public async Task<IActionResult> Create([FromForm] AddVisitRequest request)
         {
-            var medicineIds = request.Medicines?.Select(m => m.MedicineId).ToList();
-            var result = await _visitService.CheckVisitData(request.AppointmentId, medicineIds,request.NextAppointmentDate);
-            if (!result.Success)
+            try
             {
-                return BadRequest(result.Message);
+                var medicineIds = request.Medicines?.Select(m => m.MedicineId).ToList();
+                var result = await _visitService.CheckVisitData(request.AppointmentId, medicineIds, request.NextAppointmentDate);
+                if (!result.Success)
+                {
+                    return BadRequest(result.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
             }
 
 

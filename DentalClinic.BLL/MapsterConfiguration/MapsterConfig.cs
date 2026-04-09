@@ -64,7 +64,7 @@ namespace DentalClinic.BLL.MapsterConfiguration
 
             TypeAdapterConfig<Visit, VisitResponse>
             .NewConfig()
-            .Map(dest => dest.XRayImages, source => source.XRayImages.Select(img => $"http://localhost:5238/images/{img.ImageName}").ToList())
+            .Map(dest => dest.XRayImages, source => source.XRayImages.Select(img => $"https://dentalclinic.runasp.net/images/{img.ImageName}").ToList())
              .Map(dest => dest.Treatments, src => src.Treatments)
             .Map(dest => dest.Medicines, src => src.VisitMedicines);
 
@@ -74,7 +74,7 @@ namespace DentalClinic.BLL.MapsterConfiguration
 
             TypeAdapterConfig<Visit, VisitDetailsForPatient>
             .NewConfig()
-            .Map(dest => dest.XRayImages, source => source.XRayImages.Select(img => $"http://localhost:5238/images/{img.ImageName}").ToList())
+            .Map(dest => dest.XRayImages, source => source.XRayImages.Select(img => $"https://dentalclinic.runasp.net/images/{img.ImageName}").ToList())
              .Map(dest => dest.Treatments, src => src.Treatments)
             .Map(dest => dest.Medicines, src => src.VisitMedicines);
 
@@ -85,7 +85,7 @@ namespace DentalClinic.BLL.MapsterConfiguration
 
             TypeAdapterConfig<Visit, VisitDetailsForDoctor>
             .NewConfig()
-            .Map(dest => dest.XRayImages, source => source.XRayImages.Select(img => $"http://localhost:5238/images/{img.ImageName}").ToList())
+            .Map(dest => dest.XRayImages, source => source.XRayImages.Select(img => $"https://dentalclinic.runasp.net/images/{img.ImageName}").ToList())
              .Map(dest => dest.Treatments, src => src.Treatments)
             .Map(dest => dest.Medicines, src => src.VisitMedicines)
             .Map(dest => dest.PatientId, src => src.Appointment.PatientId)

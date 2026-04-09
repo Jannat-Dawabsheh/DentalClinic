@@ -1,4 +1,5 @@
 ﻿using DentalClinic.DAL.Data;
+using DentalClinic.DAL.DTO.Request;
 using DentalClinic.DAL.DTO.Request.Patient;
 using DentalClinic.DAL.DTO.Response;
 using DentalClinic.DAL.Models;
@@ -42,7 +43,7 @@ namespace DentalClinic.DAL.Repository
 
             if (exists)
             {
-                throw new Exception("Slot already booked");
+                throw new BadRequestException("Slot already booked");
             }
             await _context.Appointments.AddAsync(Request);
             await _context.SaveChangesAsync();

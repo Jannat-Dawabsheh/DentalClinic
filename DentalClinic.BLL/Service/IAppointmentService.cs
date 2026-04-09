@@ -15,6 +15,7 @@ namespace DentalClinic.BLL.Service
     public interface IAppointmentService
     {
         Task<AvilableSlotResponse?> GetAvilableSlots(int Id);
+        Task<AvilableSlotResponse?> GetAvilableSlotsForDoctor(int id, DateTime selectedDate);
         Task<AppointmentResponse?> BookAppointment(string patientId, int doctorId, BookAppointmentRequest request);
         Task<List<AppointmentListResponseForPatient>?> GetPatientAppointments(string userId, Status? Status);
         Task<List<AppointmentListResponse>?> GetDoctorAppointments(string userId, Status? Status);
