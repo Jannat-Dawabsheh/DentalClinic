@@ -11,5 +11,7 @@ namespace DentalClinic.DAL.Repository
     {
         Task<bool> AnyAsync();
         Task CreateAsync(List<Medicine> medicines);
+        Task<List<Medicine>?> GetAllMedicine();
+        Task<Medicine> AddMedicineAsync(Medicine medicines);
     }
 }

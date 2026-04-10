@@ -9,6 +9,7 @@ using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,16 +27,18 @@ namespace DentalClinic.BLL.Service
         private readonly IPatientRepository _patientRepository;
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly IAppointmentService _appointmentService;
+        private readonly IMedicineRepository _medicineRepository;
 
         public DoctorServices(IDoctorRepository doctorRepository, IEmailSender emailSender,
             IPatientRepository patientRepository, IAppointmentRepository appointmentRepository,
-            IAppointmentService appointmentService)
+            IAppointmentService appointmentService,IMedicineRepository medicineRepository)
         {
             _doctorRepository = doctorRepository;
             _emailSender = emailSender;
             _patientRepository = patientRepository;
             _appointmentRepository = appointmentRepository;
             _appointmentService = appointmentService;
+            _medicineRepository = medicineRepository;
         }
 
         public async Task<List<DoctorScheduleResponse>?>GetDoctorWorkingDays(string userId)
@@ -348,6 +351,62 @@ namespace DentalClinic.BLL.Service
 
         }
 
+        public async Task<AddingMedicineResponse>AddMedicine(string Name) 
+        {
+            try
+            {
+                if (Name is null)
+                {
+                    return new AddingMedicineResponse()
+                    {
+                        Success = false,
+                        Message = "invalid name",
 
+                    };
+
+                }
+                var medicine = new Medicine
+                {
+                    Name = Name,
+                };
+
+                var result = await _medicineRepository.AddMedicineAsync(medicine);
+
+
+                if (result is null)
+                {
+                    return new AddingMedicineResponse()
+                    {
+                        Success = false,
+                        Message = "Can't add medicine",
+
+                    };
+                }
+
+                return new AddingMedicineResponse()
+                {
+                    Success = true,
+                    Message ="Medicine added successfully",
+                    Id=result.Id,
+                    Name=result.Name,
+                };
+            }
+            catch (Exception ex) {
+                return new AddingMedicineResponse()
+                {
+                    Success = false,
+                    Message = "Exception error",
+                    Errors = new List<string> { ex.Message }
+                };
+            }
+        }
+         
+        public async Task<List<Medicine>?> GetAllMedicineAsync()
+        {
+           
+                return await _medicineRepository.GetAllMedicine();
+
+        }
+    
     }
 }

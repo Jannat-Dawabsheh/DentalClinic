@@ -20,5 +20,7 @@ namespace DentalClinic.BLL.Service
 
         Task<BaseResponse> UpdatePatientData(UpdatePatientDataRequest request, int id);
         Task<PatientDataResponse?> GetPatientByIdOrName(int? Id, String? Name);
+        Task<AddingMedicineResponse> AddMedicine(string Name);
+        Task<List<Medicine>?> GetAllMedicineAsync();
     }
 }

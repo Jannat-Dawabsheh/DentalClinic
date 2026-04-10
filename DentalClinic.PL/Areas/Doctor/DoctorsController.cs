@@ -100,5 +100,25 @@ namespace DentalClinic.PL.Areas.Doctor
             return Ok(result);
         }
 
+
+        [HttpGet("Medicines")]
+
+        public async Task<IActionResult> GetAllMedicines()
+        {
+
+            var result = await _doctorServices.GetAllMedicineAsync();
+            return Ok(result);
+        }
+
+
+        [HttpPost("Medicines")]
+
+        public async Task<IActionResult> AddMedicineAsync([FromBody] AddingMedicineRequest request)
+        {
+
+            var result = await _doctorServices.AddMedicine(request.Name);
+            return Ok(result);
+        }
+
     }
 }

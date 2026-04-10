@@ -197,6 +197,32 @@
   },
   {
     "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "GetAllMedicines",
+    "RelativePath": "api/Doctors/Medicines",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
+    "Method": "AddMedicineAsync",
+    "RelativePath": "api/Doctors/Medicines",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DentalClinic.PL.Areas.Doctor.DoctorsController",
     "Method": "GetPatientByIdOrName",
     "RelativePath": "api/Doctors/Patient",
     "HttpMethod": "GET",

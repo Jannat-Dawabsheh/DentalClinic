@@ -27,5 +27,24 @@ namespace DentalClinic.DAL.Repository
             await _context.AddRangeAsync(medicines);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Medicine>?> GetAllMedicine()
+        {
+            try
+            {
+                return await _context.Medicines.ToListAsync();
+            }
+            catch (Exception ex) {
+                return null;
+            }
+
+        }
+
+        public async Task<Medicine> AddMedicineAsync(Medicine medicines)
+        {
+            await _context.AddAsync(medicines);
+            await _context.SaveChangesAsync();
+            return medicines;
+        }
     }
 }
